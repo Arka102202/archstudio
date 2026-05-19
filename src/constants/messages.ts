@@ -1,0 +1,36 @@
+export const MESSAGES = {
+  project: {
+    modalTitle:        'New project',
+    modalSubtitle:     'Give your project a name to get started.',
+    nameLabel:         'Project name',
+    namePlaceholder:   'e.g. order-service',
+    descriptionLabel:  'Description',
+    descriptionPlaceholder: 'Optional — what does this service do?',
+    createButton:      'Create project',
+    cancelButton:      'Cancel',
+    newProjectButton:  '+ New project',
+    emptyHeading:      'No projects yet',
+    emptySub:          'Create your first microservice architecture diagram.',
+    emptyCta:          'Create project',
+    deleteConfirm: (name: string): string =>
+      `Delete "${name}"? This will permanently remove all nodes and edges.`,
+  },
+
+  editor: {
+    tabCanvas:          'Canvas',
+    tabCode:            'Code',
+    tabPreview:         'Preview',
+    exportButton:       'Export',
+    backButton:         '←',
+    breadcrumbSeparator: '/',
+    sectionAddNode:     'ADD NODE',
+    sectionLayers:      'LAYERS',
+    emptyLayersText:    'No nodes yet',
+    canvasHint:         '⌘ drag to pan  ·  scroll to zoom\nhold ⇧ to select multiple',
+    rightSidebarEmpty:  'Select a node to inspect it.',
+    codePlaceholder:    'Code generation coming in Phase 2.',
+    previewPlaceholder: 'Preview coming in Phase 2.',
+    canvasEmptyHeading: 'Your canvas is empty',
+    canvasEmptySub:     'Add nodes from the left sidebar to start designing.',
+  },
+} as const
