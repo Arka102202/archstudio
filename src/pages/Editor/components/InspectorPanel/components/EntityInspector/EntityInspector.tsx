@@ -141,8 +141,6 @@ const FieldRow = ({
     setEnumInput('')
   }
 
-  const isPK = field.constraint === FieldConstraint.PK
-
   return (
     <div className="flex flex-col">
       {/* Main row */}

@@ -36,21 +36,27 @@ export const applyDerivedFromEdge = (
     .filter(ef => !existingNames.has(ef.name))
     .filter(ef => !excludeFields.includes(ef.name))
     .map(ef => ({
-      id:                generateId(),
-      name:              ef.name,
-      type:              ef.type,
-      arraySubType:      ef.arraySubType ?? null,
-      arrayEntityTypeId: ef.arraySubType === 'ENTITY_REF'      ? (ef.arrayEntityTypeId ?? null) : null,
-      arrayCustomTypeId: ef.arraySubType === 'CUSTOM_TYPE_REF' ? (ef.arrayCustomTypeId ?? null) : null,
-      entityTypeId:      ef.type === 'ENTITY_REF'              ? ef.entityTypeId                 : null,
-      customTypeId:      ef.type === 'CUSTOM_TYPE_REF'         ? (ef.customTypeId ?? null)       : null,
-      entityTypeInvalid: false,
-      sourceEntityId:    entityNode.id,
-      enumValues:        ef.type === JavaType.ENUM
+      id:                   generateId(),
+      name:                 ef.name,
+      type:                 ef.type,
+      arraySubType:         ef.arraySubType ?? null,
+      arrayEntityTypeId:    ef.arraySubType === 'ENTITY_REF'      ? (ef.arrayEntityTypeId ?? null) : null,
+      arrayCustomTypeId:    ef.arraySubType === 'CUSTOM_TYPE_REF' ? (ef.arrayCustomTypeId ?? null) : null,
+      mapKeyType:           null,
+      mapKeyEntityTypeId:   null,
+      mapKeyCustomTypeId:   null,
+      mapValueType:         null,
+      mapValueEntityTypeId: null,
+      mapValueCustomTypeId: null,
+      entityTypeId:         ef.type === 'ENTITY_REF'      ? ef.entityTypeId            : null,
+      customTypeId:         ef.type === 'CUSTOM_TYPE_REF' ? (ef.customTypeId ?? null)  : null,
+      entityTypeInvalid:    false,
+      sourceEntityId:       entityNode.id,
+      enumValues:           ef.type === JavaType.ENUM
         ? (ef.enumValues?.values ?? [])
         : null,
-      validations:       [],
-      serialization:     {
+      validations:          [],
+      serialization:        {
         jsonProperty:   '',
         jsonIgnore:     false,
         includeNonNull: false,
@@ -152,21 +158,27 @@ export const syncEntityFieldsToDTOs = (
       updatedFields = [
         ...updatedFields,
         ...toAdd.map(ef => ({
-          id:                generateId(),
-          name:              ef.name,
-          type:              ef.type,
-          arraySubType:      ef.arraySubType ?? null,
-          arrayEntityTypeId: ef.arraySubType === 'ENTITY_REF'      ? (ef.arrayEntityTypeId ?? null) : null,
-          arrayCustomTypeId: ef.arraySubType === 'CUSTOM_TYPE_REF' ? (ef.arrayCustomTypeId ?? null) : null,
-          entityTypeId:      ef.type === 'ENTITY_REF'              ? ef.entityTypeId                 : null,
-          customTypeId:      ef.type === 'CUSTOM_TYPE_REF'         ? (ef.customTypeId ?? null)       : null,
-          entityTypeInvalid: false,
-          sourceEntityId:    entityId,
-          enumValues:        ef.type === JavaType.ENUM
+          id:                   generateId(),
+          name:                 ef.name,
+          type:                 ef.type,
+          arraySubType:         ef.arraySubType ?? null,
+          arrayEntityTypeId:    ef.arraySubType === 'ENTITY_REF'      ? (ef.arrayEntityTypeId ?? null) : null,
+          arrayCustomTypeId:    ef.arraySubType === 'CUSTOM_TYPE_REF' ? (ef.arrayCustomTypeId ?? null) : null,
+          mapKeyType:           null,
+          mapKeyEntityTypeId:   null,
+          mapKeyCustomTypeId:   null,
+          mapValueType:         null,
+          mapValueEntityTypeId: null,
+          mapValueCustomTypeId: null,
+          entityTypeId:         ef.type === 'ENTITY_REF'      ? ef.entityTypeId            : null,
+          customTypeId:         ef.type === 'CUSTOM_TYPE_REF' ? (ef.customTypeId ?? null)  : null,
+          entityTypeInvalid:    false,
+          sourceEntityId:       entityId,
+          enumValues:           ef.type === JavaType.ENUM
             ? (ef.enumValues?.values ?? [])
             : null,
-          validations:       [],
-          serialization:     {
+          validations:          [],
+          serialization:        {
             jsonProperty:   '',
             jsonIgnore:     false,
             includeNonNull: false,
@@ -314,7 +326,7 @@ export function applyUsesEdge(
     {
       id:            generateId(),
       name:          'findAll',
-      returnType:    { type: 'ENTITY_REF' as const, entityTypeId: entityId, arraySubType: null, arrayEntityTypeId: null, isList: true,  isPage: false, isOptional: false, isVoid: false },
+      returnType:    { type: 'ENTITY_REF' as const, entityTypeId: entityId, customTypeId: null, arraySubType: null, arrayEntityTypeId: null, arrayCustomTypeId: null, isList: true,  isPage: false, isOptional: false, isVoid: false },
       params:        [],
       transactional: false,
       async:         false,
@@ -324,8 +336,8 @@ export function applyUsesEdge(
     {
       id:            generateId(),
       name:          'findById',
-      returnType:    { type: 'ENTITY_REF' as const, entityTypeId: entityId, arraySubType: null, arrayEntityTypeId: null, isList: false, isPage: false, isOptional: true,  isVoid: false },
-      params:        [{ name: 'id', type: JavaType.UUID, entityTypeId: null, arraySubType: null, arrayEntityTypeId: null, isPageable: false, enumValues: null }],
+      returnType:    { type: 'ENTITY_REF' as const, entityTypeId: entityId, customTypeId: null, arraySubType: null, arrayEntityTypeId: null, arrayCustomTypeId: null, isList: false, isPage: false, isOptional: true,  isVoid: false },
+      params:        [{ name: 'id', type: JavaType.UUID, entityTypeId: null, customTypeId: null, arraySubType: null, arrayEntityTypeId: null, arrayCustomTypeId: null, isPageable: false, enumValues: null }],
       transactional: false,
       async:         false,
       aiPrompt:      emptyAIPrompt(),
@@ -334,8 +346,8 @@ export function applyUsesEdge(
     {
       id:            generateId(),
       name:          'create',
-      returnType:    { type: 'ENTITY_REF' as const, entityTypeId: entityId, arraySubType: null, arrayEntityTypeId: null, isList: false, isPage: false, isOptional: false, isVoid: false },
-      params:        [{ name: entityLabel.toLowerCase(), type: 'ENTITY_REF' as const, entityTypeId: entityId, arraySubType: null, arrayEntityTypeId: null, isPageable: false, enumValues: null }],
+      returnType:    { type: 'ENTITY_REF' as const, entityTypeId: entityId, customTypeId: null, arraySubType: null, arrayEntityTypeId: null, arrayCustomTypeId: null, isList: false, isPage: false, isOptional: false, isVoid: false },
+      params:        [{ name: entityLabel.toLowerCase(), type: 'ENTITY_REF' as const, entityTypeId: entityId, customTypeId: null, arraySubType: null, arrayEntityTypeId: null, arrayCustomTypeId: null, isPageable: false, enumValues: null }],
       transactional: true,
       async:         false,
       aiPrompt:      emptyAIPrompt(),
@@ -344,10 +356,10 @@ export function applyUsesEdge(
     {
       id:            generateId(),
       name:          'update',
-      returnType:    { type: 'ENTITY_REF' as const, entityTypeId: entityId, arraySubType: null, arrayEntityTypeId: null, isList: false, isPage: false, isOptional: false, isVoid: false },
+      returnType:    { type: 'ENTITY_REF' as const, entityTypeId: entityId, customTypeId: null, arraySubType: null, arrayEntityTypeId: null, arrayCustomTypeId: null, isList: false, isPage: false, isOptional: false, isVoid: false },
       params:        [
-        { name: 'id',                      type: JavaType.UUID,           entityTypeId: null,     arraySubType: null, arrayEntityTypeId: null, isPageable: false, enumValues: null },
-        { name: entityLabel.toLowerCase(), type: 'ENTITY_REF' as const,  entityTypeId: entityId, arraySubType: null, arrayEntityTypeId: null, isPageable: false, enumValues: null },
+        { name: 'id',                      type: JavaType.UUID,           entityTypeId: null,     customTypeId: null, arraySubType: null, arrayEntityTypeId: null, arrayCustomTypeId: null, isPageable: false, enumValues: null },
+        { name: entityLabel.toLowerCase(), type: 'ENTITY_REF' as const,  entityTypeId: entityId, customTypeId: null, arraySubType: null, arrayEntityTypeId: null, arrayCustomTypeId: null, isPageable: false, enumValues: null },
       ],
       transactional: true,
       async:         false,
@@ -357,8 +369,8 @@ export function applyUsesEdge(
     {
       id:            generateId(),
       name:          'delete',
-      returnType:    { type: null, entityTypeId: null, arraySubType: null, arrayEntityTypeId: null, isList: false, isPage: false, isOptional: false, isVoid: true },
-      params:        [{ name: 'id', type: JavaType.UUID, entityTypeId: null, arraySubType: null, arrayEntityTypeId: null, isPageable: false, enumValues: null }],
+      returnType:    { type: null, entityTypeId: null, customTypeId: null, arraySubType: null, arrayEntityTypeId: null, arrayCustomTypeId: null, isList: false, isPage: false, isOptional: false, isVoid: true },
+      params:        [{ name: 'id', type: JavaType.UUID, entityTypeId: null, customTypeId: null, arraySubType: null, arrayEntityTypeId: null, arrayCustomTypeId: null, isPageable: false, enumValues: null }],
       transactional: true,
       async:         false,
       aiPrompt:      emptyAIPrompt(),

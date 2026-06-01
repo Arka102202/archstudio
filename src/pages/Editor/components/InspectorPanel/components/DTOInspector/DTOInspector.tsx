@@ -29,6 +29,8 @@ const VALIDATIONS_FOR_TYPE: Record<JavaType, ValidationType[]> = {
   [JavaType.ENUM]:      [ValidationType.NOT_NULL],
   [JavaType.BLOB]:      [ValidationType.NOT_NULL],
   [JavaType.ARRAY]:     [ValidationType.NOT_NULL, ValidationType.NOT_EMPTY, ValidationType.SIZE],
+  [JavaType.MAP]:       [ValidationType.NOT_NULL, ValidationType.NOT_EMPTY, ValidationType.SIZE],
+  [JavaType.JSON_NODE]: [ValidationType.NOT_NULL],
 }
 
 // ─── Divider ──────────────────────────────────────────────────────

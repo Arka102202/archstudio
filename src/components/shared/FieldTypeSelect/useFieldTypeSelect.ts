@@ -5,7 +5,7 @@ import type { EntityOption, CustomTypeOption } from './types'
 
 export function useFieldTypeSelect(
   currentNodeId: string,
-  mode:          'entity' | 'dto',
+  _mode:         'entity' | 'dto',
 ): { entityOptions: EntityOption[]; customTypeOptions: CustomTypeOption[] } {
   const allNodes = useNodes()
   const allEdges = useEdges()

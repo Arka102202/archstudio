@@ -23,8 +23,6 @@ export const useCodeChat = (projectId: string) => {
     setSessions,
     addMessage,
     updateLastMessage,
-    appendLastMessageText,
-    appendLastMessageFileOp,
     clearAttachedFiles,
     attachFile,
     detachFile,

@@ -78,7 +78,7 @@ export interface TableInspectorHook {
   handleQueryTargetEntityChange:   (queryId: string, entityId: string | null) => void
   handleQueryNativeToggle:         (queryId: string) => void
   handleQueryModifyingToggle:      (queryId: string) => void
-  handleAddQueryParam:             (queryId: string, name: string, type: JavaType, arraySubType?: JavaType | null, enumValues?: string[] | null) => void
+  handleAddQueryParam:             (queryId: string, name: string, type: JavaType | 'CUSTOM_TYPE_REF', arraySubType?: JavaType | 'CUSTOM_TYPE_REF' | null, enumValues?: string[] | null, customTypeId?: string | null, arrayCustomTypeId?: string | null) => void
   handleRemoveQueryParam:          (queryId: string, paramIdx: number) => void
   handleQueryParamSubTypeChange:   (queryId: string, paramIdx: number, subType: JavaType) => void
   handleQueryReturnTypeChange:     (queryId: string, partial: Partial<QueryReturnType>) => void

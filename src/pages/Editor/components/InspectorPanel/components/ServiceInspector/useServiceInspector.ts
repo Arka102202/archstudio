@@ -204,8 +204,10 @@ export const useServiceInspector = (
     const emptyReturn: MethodReturnType = {
       type:              null,
       entityTypeId:      null,
+      customTypeId:      null,
       arraySubType:      null,
       arrayEntityTypeId: null,
+      arrayCustomTypeId: null,
       isList:            false,
       isPage:            false,
       isOptional:        false,
@@ -352,8 +354,10 @@ export const useServiceInspector = (
           returnType: {
             type:              null,
             entityTypeId:      null,
+            customTypeId:      null,
             arraySubType:      null,
             arrayEntityTypeId: null,
+            arrayCustomTypeId: null,
             isList:            false,
             isPage:            false,
             isOptional:        false,

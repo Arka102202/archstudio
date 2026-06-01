@@ -8,8 +8,8 @@ export interface MessageThreadProps {
 }
 
 export interface MessageThreadHook {
-  messagesEndRef:   React.RefObject<HTMLDivElement>
-  containerRef:     React.RefObject<HTMLDivElement>
+  messagesEndRef:   React.RefObject<HTMLDivElement | null>
+  containerRef:     React.RefObject<HTMLDivElement | null>
   shouldAutoScroll: boolean
   handleScroll:     () => void
 }

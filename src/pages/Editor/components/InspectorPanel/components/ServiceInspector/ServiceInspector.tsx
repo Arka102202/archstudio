@@ -225,7 +225,7 @@ const MethodCard = ({
               <FieldTypeSelect
                 value={method.returnType.type}
                 entityTypeId={method.returnType.entityTypeId}
-                customTypeId={(method.returnType as Record<string, unknown>).customTypeId as string | null | undefined}
+                customTypeId={method.returnType.customTypeId}
                 entityOptions={entityOptions}
                 customTypeOptions={customTypeOptions}
                 onChange={(t, eid, cid) => onReturnTypeChange(method.id, t, eid, cid)}
@@ -236,7 +236,7 @@ const MethodCard = ({
                   <FieldTypeSelect
                     value={method.returnType.arraySubType}
                     entityTypeId={method.returnType.arrayEntityTypeId}
-                    customTypeId={(method.returnType as Record<string, unknown>).arrayCustomTypeId as string | null | undefined}
+                    customTypeId={method.returnType.arrayCustomTypeId}
                     entityOptions={entityOptions}
                     customTypeOptions={customTypeOptions}
                     excludeTypes={[JavaType.ARRAY]}

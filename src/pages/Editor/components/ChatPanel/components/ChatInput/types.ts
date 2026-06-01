@@ -11,7 +11,7 @@ export interface ChatInputProps {
 export interface ChatInputHook {
   value:         string
   setValue:      (v: string) => void
-  textareaRef:   React.RefObject<HTMLTextAreaElement>
+  textareaRef:   React.RefObject<HTMLTextAreaElement | null>
   handleKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void
   handleSend:    () => void
   canSend:       boolean

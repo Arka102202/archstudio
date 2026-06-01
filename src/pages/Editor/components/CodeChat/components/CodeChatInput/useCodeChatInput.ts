@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useMemo } from 'react'
-import type { CodeChatInputProps, TreeFolder, TreeFile, PickerView, CheckState } from './types'
+import type { CodeChatInputProps, TreeFolder, PickerView, CheckState } from './types'
 import type { AttachedFile } from '@store'
 
 // ─── @ mention detection ──────────────────────────────────────────────────────
