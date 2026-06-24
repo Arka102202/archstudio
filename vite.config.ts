@@ -5,6 +5,15 @@ import { VitePWA } from 'vite-plugin-pwa'
 import { resolve } from 'path'
 
 export default defineConfig({
+  server: {
+    proxy: {
+      '/api-proxy': {
+        target:      'http://127.0.0.1:3456',
+        changeOrigin: true,
+        rewrite:     (path) => path.replace(/^\/api-proxy/, ''),
+      },
+    },
+  },
   plugins: [
     react(),
     tailwindcss(),

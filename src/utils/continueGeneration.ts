@@ -1,5 +1,5 @@
 import DIRECTORY_SPEC         from '@prompts/springBootDirectory.md?raw'
-import { getMessagesUrl }     from './proxyUrl'
+import { getMessagesUrl, getProxyHeaders } from './proxyUrl'
 import { db }                 from '@db'
 import { parseGenerationStream } from './generateCode'
 
@@ -172,7 +172,7 @@ files above to determine what is missing. Generate only those missing files.`
     const response = await fetch(getMessagesUrl(), {
       method:  'POST',
       signal:  params.signal,
-      headers: { 'Content-Type': 'application/json' },
+      headers: getProxyHeaders(),
       body: JSON.stringify({
         model:    'claude-sonnet-4-5',
         stream:   true,

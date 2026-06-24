@@ -1,4 +1,4 @@
-import { getMessagesUrl } from './proxyUrl'
+import { getMessagesUrl, getProxyHeaders } from './proxyUrl'
 import { db }             from '@db'
 import DIRECTORY_SPEC     from '@prompts/springBootDirectory.md?raw'
 
@@ -242,7 +242,7 @@ Generate the complete application following both documents above.`
     const response = await fetch(getMessagesUrl(), {
       method:  'POST',
       signal:  params.signal,
-      headers: { 'Content-Type': 'application/json' },
+      headers: getProxyHeaders(),
       body: JSON.stringify({
         model:    'claude-sonnet-4-5',
         stream:   true,

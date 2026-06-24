@@ -1,4 +1,4 @@
-import { getMessagesUrl } from './proxyUrl'
+import { getMessagesUrl, getProxyHeaders } from './proxyUrl'
 import type { CodeChatMessage, CodeChatFileOp } from '@store/codeChatStore'
 
 // ─── Stream parser state ──────────────────────────────────────────
@@ -114,7 +114,7 @@ export async function sendCodeChatMessage(params: {
     response = await fetch(getMessagesUrl(), {
       method:  'POST',
       signal,
-      headers: { 'Content-Type': 'application/json' },
+      headers: getProxyHeaders(),
       body: JSON.stringify({
         model:      'claude-sonnet-4-5',
         stream:     true,

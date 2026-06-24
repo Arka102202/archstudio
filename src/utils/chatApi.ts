@@ -1,5 +1,5 @@
 import CHAT_SYSTEM_PROMPT from '@prompts/chatSystemPrompt.md?raw'
-import { getMessagesUrl }  from './proxyUrl'
+import { getMessagesUrl, getProxyHeaders } from './proxyUrl'
 import type { ChatMessage, ChatSession, CanvasAction } from '@entity'
 
 type ApiMsg = { role: 'user' | 'assistant'; content: string }
@@ -35,7 +35,7 @@ export async function sendChatMessage(params: {
     response = await fetch(getMessagesUrl(), {
       method:  'POST',
       signal:  params.signal,
-      headers: { 'Content-Type': 'application/json' },
+      headers: getProxyHeaders(),
       body:    JSON.stringify({
         model:    'claude-sonnet-4-5',
         stream:   true,

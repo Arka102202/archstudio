@@ -1,7 +1,7 @@
 import { db } from '../db'
 import type { ChatSession, ChatMessage } from '../entity/Chat'
 import { generateId } from './id'
-import { getMessagesUrl } from './proxyUrl'
+import { getMessagesUrl, getProxyHeaders } from './proxyUrl'
 import { useChatStore } from '../store/chatStore'
 
 export async function createChatSession(msId: string, projectId: string): Promise<ChatSession> {
@@ -69,7 +69,7 @@ export async function autoSummariseSession(
     const messagesText = messages.map(m => `${m.role}: ${m.content}`).join('\n')
     const response = await fetch(getMessagesUrl(), {
       method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getProxyHeaders(),
       body:    JSON.stringify({
         model:    'claude-sonnet-4-5',
         stream:   false,

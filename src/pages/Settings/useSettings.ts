@@ -4,7 +4,7 @@ import type { SettingsHook } from './types'
 
 // ─── Constants ────────────────────────────────────────────────────
 
-const PROXY_URL_KEY     = 'archflow_proxy_url'
+const PROXY_URL_KEY     = 'claude-url'
 const DEFAULT_PROXY_URL = 'http://127.0.0.1:3456'
 
 // ─── useSettings ─────────────────────────────────────────────────
@@ -21,7 +21,8 @@ export const useSettings = (): SettingsHook => {
   const checkProxy = useCallback(async (url: string): Promise<void> => {
     try {
       const res = await fetch(`${url}/health`, {
-        signal: AbortSignal.timeout(2000),
+        signal:  AbortSignal.timeout(2000),
+        headers: { 'bypass-tunnel-reminder': 'true', 'ngrok-skip-browser-warning': 'true' },
       })
       setProxyStatus(res.ok ? 'online' : 'offline')
     } catch {
