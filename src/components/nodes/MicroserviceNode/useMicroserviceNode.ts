@@ -48,7 +48,7 @@ export const useMicroserviceNode = (
   const activeProjectId     = useProjectStore(s => s.activeProjectId)
   const generatingMsId      = useCodeEditorStore(s => s.generatingMsId)
   const generatedFiles      = useCodeEditorStore(s => s.generatedFiles)
-  const { setNodes }        = useReactFlow<RFNode>()
+  const { setNodes } = useReactFlow<RFNode>()
   const { mutate: deleteNodes } = useDeleteNodes()
   const allNodes = useNodes()
 
@@ -98,7 +98,6 @@ export const useMicroserviceNode = (
 
   // ─── runFullGeneration ───────────────────────────────────────────
 
-  // Extracted so both runFullGeneration and handleContinue can register it as the modal's continue callback
   const runContinue = useCallback(async (): Promise<void> => {
     if (!activeProjectId) return
     const codeStore = useCodeEditorStore.getState()
@@ -123,7 +122,6 @@ export const useMicroserviceNode = (
   const runFullGeneration = useCallback(async (): Promise<void> => {
     if (!activeProjectId) return
 
-    // Delete all previously generated files for this MS from IDB before starting fresh
     await db.generatedFiles.where('msId').equals(nodeId).delete()
 
     useCodeEditorStore.getState().clearModifiedFiles()
@@ -144,7 +142,6 @@ export const useMicroserviceNode = (
     useCodeEditorStore.getState().setAbortController(null)
   }, [nodeId, activeProjectId, data.label])
 
-  // Keep the modal's continue callback up-to-date whenever runContinue changes
   useEffect(() => {
     useGenerationProgressStore.getState().setContinueCallback(runContinue)
   }, [runContinue])

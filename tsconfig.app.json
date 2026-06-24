@@ -17,6 +17,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    "resolveJsonModule": true,
     "types": ["vite-plugin-pwa/client"],
     "baseUrl": ".",
     "paths": {
@@ -43,7 +44,9 @@
       "@constants":    ["src/constants"],
       "@constants/*":  ["src/constants/*"],
       "@prompts":      ["src/prompts"],
-      "@prompts/*":    ["src/prompts/*"]
+      "@prompts/*":    ["src/prompts/*"],
+      "@assets":       ["src/assets"],
+      "@assets/*":     ["src/assets/*"]
     }
   },
   "include": ["src"]

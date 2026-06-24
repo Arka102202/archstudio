@@ -26,6 +26,7 @@ const EditorHeader = ({
     commitEdit,
     handleEditKeyDown,
     setEditValue,
+    handleCloneFromExample,
   } = useEditorHeader({ projectName, onRename })
 
   return (
@@ -84,9 +85,36 @@ const EditorHeader = ({
         ))}
       </div>
 
-      {/* Right: theme toggle + export */}
+      {/* Right: theme toggle + new-from-example + export */}
       <div className="flex items-center gap-2 shrink-0">
         <ThemeToggle />
+        <button
+          onClick={() => { void handleCloneFromExample() }}
+          title="Create a new microservice from the built-in example template"
+          className="flex items-center gap-1.5 px-3 py-[5px] border-none rounded-sm text-xs font-semibold cursor-pointer transition-colors"
+          style={{
+            background: 'var(--color-surface-alt)',
+            color:      'var(--color-text-2)',
+            border:     '1px solid var(--color-border)',
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.background = 'var(--color-accent-light)'
+            e.currentTarget.style.color      = 'var(--color-accent)'
+            e.currentTarget.style.borderColor = 'var(--color-accent)'
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.background  = 'var(--color-surface-alt)'
+            e.currentTarget.style.color       = 'var(--color-text-2)'
+            e.currentTarget.style.borderColor = 'var(--color-border)'
+          }}
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          New from Example
+        </button>
         <button
           onClick={() => alert('Export coming in Phase 2.')}
           className="px-3.5 py-[5px] bg-accent text-accent-text border-none rounded-sm text-xs font-semibold cursor-pointer"

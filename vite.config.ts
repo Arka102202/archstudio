@@ -36,6 +36,7 @@ export default defineConfig({
       '@sw':         resolve(__dirname, 'src/sw'),
       '@constants':  resolve(__dirname, 'src/constants'),
       '@prompts':    resolve(__dirname, 'src/prompts'),
+      '@assets':     resolve(__dirname, 'src/assets'),
     },
   },
 })

@@ -1,0 +1,1012 @@
+[
+    {
+        "id": "7e918675-acb4-46bc-9809-65cfd5154fea",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "0e3c48af-012c-4467-8db7-9cf8dff3d35d",
+        "toNodeId": "9f665d9f-5e01-4ffc-a3cc-934dc8a56c2c",
+        "type": "USES",
+        "label": "USES",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "1d44ec8d-2505-4a68-8b22-47759682768c",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "161ba297-f440-4626-8079-9f32bf3b1978",
+        "toNodeId": "1e75376f-ebe8-407b-9d9d-c311ba526bb0",
+        "type": "RETURNS",
+        "label": "RETURNS",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "6da13daf-13e7-4a44-a5e8-c75cc3c9ca37",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "161ba297-f440-4626-8079-9f32bf3b1978",
+        "toNodeId": "e68687cc-54bb-49bc-8a40-9770165009c5",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "39d4ba3f-5572-401f-95a2-43a667ebbab2",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "1b64525f-0974-4aac-9c35-0a2a870f7384",
+        "toNodeId": "be13f657-ff34-4b04-80de-bbc65d687f60",
+        "type": "INVOKES",
+        "label": "INVOKES",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "5050afd4-f92a-4a98-804a-6b6cc57d8595",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "1bda28f0-76f7-40ef-b14e-3102ea69e782",
+        "toNodeId": "c077cfff-54f6-434a-8c52-6708f546adbf",
+        "type": "USES_CUSTOM_TYPE",
+        "label": "USES_CUSTOM_TYPE",
+        "fromHandle": "",
+        "toHandle": ""
+    },
+    {
+        "id": "7a6d910f-02dd-4b93-97cf-5abcd0af72ea",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "1bda28f0-76f7-40ef-b14e-3102ea69e782",
+        "toNodeId": "db4a36d6-a534-4c6d-a2e0-9ea6ef97865e",
+        "type": "DERIVED_FROM",
+        "label": "DERIVED_FROM",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "e9866459-bdee-4923-b3e0-edb4aa84575e",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "1bda28f0-76f7-40ef-b14e-3102ea69e782",
+        "toNodeId": "5be3d8af-3e75-4afd-9134-f168545d1dfd",
+        "type": "USES_CUSTOM_TYPE",
+        "label": "USES_CUSTOM_TYPE",
+        "fromHandle": "",
+        "toHandle": ""
+    },
+    {
+        "id": "160caf07-e2df-4605-b65f-40adb66b7707",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "1e75376f-ebe8-407b-9d9d-c311ba526bb0",
+        "toNodeId": "f0ef09a0-40b2-49ff-ad42-d3a25c0478e1",
+        "type": "DERIVED_FROM",
+        "label": "DERIVED_FROM",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "25008ef1-854e-40ee-a05a-e6abe7711802",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "1e75376f-ebe8-407b-9d9d-c311ba526bb0",
+        "toNodeId": "db4a36d6-a534-4c6d-a2e0-9ea6ef97865e",
+        "type": "USES_TYPE",
+        "label": "USES_TYPE",
+        "fromHandle": "",
+        "toHandle": ""
+    },
+    {
+        "id": "036b60e2-cab7-44fe-90e7-515ef5435966",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "27443e6f-c464-45ee-acfa-98b11d0fd50e",
+        "toNodeId": "c7dcb7ed-a493-480f-a407-b3361f6e6305",
+        "type": "RETURNS",
+        "label": "RETURNS",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "d1c3d867-d36d-4f35-9fef-639bcbe3e706",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "27443e6f-c464-45ee-acfa-98b11d0fd50e",
+        "toNodeId": "3abacc9f-8584-4fc8-b074-141a6542407f",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "2362c3cf-e26a-4fc5-b9fc-c71f678b6800",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "2d1453c4-387b-44cc-86ac-1a29efd4e7ba",
+        "toNodeId": "823e5284-e249-4191-92bf-3c8388a576dd",
+        "type": "RETURNS",
+        "label": "RETURNS",
+        "fromHandle": "right",
+        "toHandle": "left"
+    },
+    {
+        "id": "b23a1399-09d2-49d5-8b83-d9cdb72fbcd2",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "2d1453c4-387b-44cc-86ac-1a29efd4e7ba",
+        "toNodeId": "f5513810-cc57-46d3-9389-eb9aa67c4635",
+        "type": "ACCEPTS",
+        "label": "ACCEPTS",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "f9cddf11-6e9d-4132-90f0-baedc987863a",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "2d1453c4-387b-44cc-86ac-1a29efd4e7ba",
+        "toNodeId": "836a75bd-c68d-478d-8212-fc7d52d1172c",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "68eca332-db17-49b9-bb1d-dc3e3638b782",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "3abacc9f-8584-4fc8-b074-141a6542407f",
+        "toNodeId": "65c57625-2f5a-4008-aff0-f5311ca43007",
+        "type": "INVOKES",
+        "label": "INVOKES",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "459febb1-8087-4b3b-b30d-7c4433d4f115",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "3bb56b69-cbe8-4347-a994-5a0619bf87ba",
+        "toNodeId": "f0e36cbf-703b-473f-a34c-e3824ab12b42",
+        "type": "USES_TYPE",
+        "label": "USES_TYPE",
+        "fromHandle": "",
+        "toHandle": ""
+    },
+    {
+        "id": "ee7b8caa-6bc9-4ffb-93f7-3b53f8df00b6",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "3bb56b69-cbe8-4347-a994-5a0619bf87ba",
+        "toNodeId": "46196b66-85e9-4be0-9522-4dbeaa780b02",
+        "type": "DERIVED_FROM",
+        "label": "DERIVED_FROM",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "2110c816-3d04-4a1c-9996-e391ced95df8",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "3c5dc944-7c9f-4436-94b0-b015c9b9525a",
+        "toNodeId": "7a145069-233d-4ea7-beea-f3784df3f2b3",
+        "type": "CONNECTS_TO",
+        "label": "CONNECTS_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "155e1a72-1080-4b43-8355-470299d3702e",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "4189c9e5-acbe-4a7c-b13a-f58eb3980539",
+        "toNodeId": "f0ef09a0-40b2-49ff-ad42-d3a25c0478e1",
+        "type": "USES",
+        "label": "USES",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "b760b77f-cbb7-4669-a5fd-20a0d35f5989",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "46196b66-85e9-4be0-9522-4dbeaa780b02",
+        "toNodeId": "f0e36cbf-703b-473f-a34c-e3824ab12b42",
+        "type": "EMBEDS",
+        "label": "EMBEDS",
+        "fromHandle": "top",
+        "toHandle": "bottom"
+    },
+    {
+        "id": "d0d61849-df05-443f-8a9c-190e4fc571a5",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "46196b66-85e9-4be0-9522-4dbeaa780b02",
+        "toNodeId": "3c5dc944-7c9f-4436-94b0-b015c9b9525a",
+        "type": "STORED_IN",
+        "label": "STORED_IN",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "4e9739d2-7adf-4f3f-8494-72f2db738286",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "474532fa-3cbd-4c69-903c-2ac925a80a42",
+        "toNodeId": "474532fa-3cbd-4c69-903c-2ac925a80a42",
+        "type": "USES_CUSTOM_TYPE",
+        "label": "USES_CUSTOM_TYPE",
+        "fromHandle": "",
+        "toHandle": ""
+    },
+    {
+        "id": "eb1540e7-d243-4845-a08a-300111ee5871",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "474532fa-3cbd-4c69-903c-2ac925a80a42",
+        "toNodeId": "62ab8305-3ca5-41ae-aaba-095376fc9349",
+        "type": "USES_CUSTOM_TYPE",
+        "label": "USES_CUSTOM_TYPE",
+        "fromHandle": "",
+        "toHandle": ""
+    },
+    {
+        "id": "c8d4e99a-9a55-4e65-82dd-ab245628008b",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "4cf231cd-831b-4a70-a406-1bbb84f6ea60",
+        "toNodeId": "3abacc9f-8584-4fc8-b074-141a6542407f",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "697d24d4-3521-4353-899e-2b014e002f93",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "51fa72c7-86b4-4c15-996a-eda6a92fe212",
+        "toNodeId": "f0ef09a0-40b2-49ff-ad42-d3a25c0478e1",
+        "type": "DERIVED_FROM",
+        "label": "DERIVED_FROM",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "36b6053e-dea1-46fb-98c7-7a4a22fdda9c",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "527a6a21-d80c-418b-b6bb-20103c777398",
+        "toNodeId": "0e3c48af-012c-4467-8db7-9cf8dff3d35d",
+        "type": "INVOKES",
+        "label": "INVOKES",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "2d9722cc-6ffb-4b14-9d80-cb16328d6c78",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "5588c9da-1d3e-4f53-8331-80851a17d013",
+        "toNodeId": "1b64525f-0974-4aac-9c35-0a2a870f7384",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "824a106f-e50e-4098-bc86-befdaed56a89",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "5768915c-4653-45f1-a3be-7840c58fae3a",
+        "toNodeId": "51fa72c7-86b4-4c15-996a-eda6a92fe212",
+        "type": "ACCEPTS",
+        "label": "ACCEPTS",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "91f59d7d-372c-4aec-8a57-4204b6a262b8",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "5768915c-4653-45f1-a3be-7840c58fae3a",
+        "toNodeId": "e68687cc-54bb-49bc-8a40-9770165009c5",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "c49f45db-bd23-4659-9b66-6e395e1d932c",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "5768915c-4653-45f1-a3be-7840c58fae3a",
+        "toNodeId": "823e5284-e249-4191-92bf-3c8388a576dd",
+        "type": "RETURNS",
+        "label": "RETURNS",
+        "fromHandle": "right",
+        "toHandle": "left"
+    },
+    {
+        "id": "13a5c322-c72c-4074-ac1b-f326810d4d61",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "5a796e48-d436-4d6c-a71b-565abd42f80e",
+        "toNodeId": "6ce2d83d-c49c-4119-9950-37bb6a50f1b8",
+        "type": "RETURNS",
+        "label": "RETURNS",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "1937248c-726e-4e6b-a11a-9291f7458124",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "5a796e48-d436-4d6c-a71b-565abd42f80e",
+        "toNodeId": "1b64525f-0974-4aac-9c35-0a2a870f7384",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "5d85d6c3-c373-476f-93fb-8c611bb8821d",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "5a796e48-d436-4d6c-a71b-565abd42f80e",
+        "toNodeId": "ff0d28e5-0280-4b5c-8235-2a2042440312",
+        "type": "ACCEPTS",
+        "label": "ACCEPTS",
+        "fromHandle": "right",
+        "toHandle": "left"
+    },
+    {
+        "id": "81a64513-990a-43f1-90d9-c0400a2d90ae",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "64327ca7-9d7e-4e96-9161-200713aa8832",
+        "toNodeId": "3bb56b69-cbe8-4347-a994-5a0619bf87ba",
+        "type": "RETURNS",
+        "label": "RETURNS",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "e59a6c7b-4b01-4a84-b258-128ed14453c7",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "64327ca7-9d7e-4e96-9161-200713aa8832",
+        "toNodeId": "836a75bd-c68d-478d-8212-fc7d52d1172c",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "a59331eb-378e-4d44-9072-3258c911fcda",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "65c57625-2f5a-4008-aff0-f5311ca43007",
+        "toNodeId": "db4a36d6-a534-4c6d-a2e0-9ea6ef97865e",
+        "type": "USES",
+        "label": "USES",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "1e4bb807-9e28-4bc5-8a68-c295234767b3",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "6a5ef367-a1d4-4b9e-aea2-2646af43f78d",
+        "toNodeId": "e68687cc-54bb-49bc-8a40-9770165009c5",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "09695a94-355c-4294-95d9-dbad51b8df22",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "6afe684b-c07c-4dfc-9220-96d87ac4ad80",
+        "toNodeId": "51fa72c7-86b4-4c15-996a-eda6a92fe212",
+        "type": "ACCEPTS",
+        "label": "ACCEPTS",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "0b72d2de-45f2-4040-900f-3e0ca050c54f",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "6afe684b-c07c-4dfc-9220-96d87ac4ad80",
+        "toNodeId": "e68687cc-54bb-49bc-8a40-9770165009c5",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "3011b2f3-a758-4f55-a062-0f1b3c1def5f",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "6afe684b-c07c-4dfc-9220-96d87ac4ad80",
+        "toNodeId": "823e5284-e249-4191-92bf-3c8388a576dd",
+        "type": "RETURNS",
+        "label": "RETURNS",
+        "fromHandle": "right",
+        "toHandle": "left"
+    },
+    {
+        "id": "d7d7f818-9520-4843-9354-7d317f65cff8",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "6b65e09c-4845-47a2-9f20-4353e7e5996f",
+        "toNodeId": "7a145069-233d-4ea7-beea-f3784df3f2b3",
+        "type": "CONNECTS_TO",
+        "label": "CONNECTS_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "3b68edfd-9236-498c-842e-f878d44362a8",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "6ce2d83d-c49c-4119-9950-37bb6a50f1b8",
+        "toNodeId": "f0e36cbf-703b-473f-a34c-e3824ab12b42",
+        "type": "DERIVED_FROM",
+        "label": "DERIVED_FROM",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "26d8d552-ebd6-466c-92ee-e50ab2f75f91",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "6f433d58-5ef5-460a-bb2c-6ad7ec247426",
+        "toNodeId": "a0d0ffd3-c452-438c-b344-e29b10f9b08d",
+        "type": "ACCEPTS",
+        "label": "ACCEPTS",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "3be1bd5f-eef3-4288-8960-3585b624658a",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "6f433d58-5ef5-460a-bb2c-6ad7ec247426",
+        "toNodeId": "823e5284-e249-4191-92bf-3c8388a576dd",
+        "type": "RETURNS",
+        "label": "RETURNS",
+        "fromHandle": "right",
+        "toHandle": "top"
+    },
+    {
+        "id": "951ab46c-48bc-43c5-aad9-fe9940b701f6",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "6f433d58-5ef5-460a-bb2c-6ad7ec247426",
+        "toNodeId": "1b64525f-0974-4aac-9c35-0a2a870f7384",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "5530ce25-3e52-4d0a-b305-ada0805f3f74",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "72d93e33-856a-4197-a301-f0e3d5e00e3c",
+        "toNodeId": "0f574419-f726-44fa-b7a0-864b5545d46c",
+        "type": "ACCEPTS",
+        "label": "ACCEPTS",
+        "fromHandle": "right",
+        "toHandle": "left"
+    },
+    {
+        "id": "a22cbee1-9d62-4c54-9553-30409a3587ac",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "72d93e33-856a-4197-a301-f0e3d5e00e3c",
+        "toNodeId": "527a6a21-d80c-418b-b6bb-20103c777398",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "dd0593fd-f23f-4da7-b73b-8312e458af58",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "72d93e33-856a-4197-a301-f0e3d5e00e3c",
+        "toNodeId": "823e5284-e249-4191-92bf-3c8388a576dd",
+        "type": "RETURNS",
+        "label": "RETURNS",
+        "fromHandle": "right",
+        "toHandle": "bottom"
+    },
+    {
+        "id": "02cf3e50-230d-4efd-86b7-6768f7782b5d",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "75394c2a-97de-4925-a2c4-5d3ce37b0d41",
+        "toNodeId": "3abacc9f-8584-4fc8-b074-141a6542407f",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "75a89dfb-cfca-4701-b161-af9a39c0a059",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "75394c2a-97de-4925-a2c4-5d3ce37b0d41",
+        "toNodeId": "ff0d28e5-0280-4b5c-8235-2a2042440312",
+        "type": "ACCEPTS",
+        "label": "ACCEPTS",
+        "fromHandle": "right",
+        "toHandle": "left"
+    },
+    {
+        "id": "c82e54a4-435a-4af0-9cf0-f26590b65ebb",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "75394c2a-97de-4925-a2c4-5d3ce37b0d41",
+        "toNodeId": "c7dcb7ed-a493-480f-a407-b3361f6e6305",
+        "type": "RETURNS",
+        "label": "RETURNS",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "316f03f6-0744-4ca0-a856-afd2c6831f75",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "836a75bd-c68d-478d-8212-fc7d52d1172c",
+        "toNodeId": "ad47c6ef-5342-4ed0-8b4f-ebab3aa05540",
+        "type": "INVOKES",
+        "label": "INVOKES",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "037d81b3-0eff-4ca5-9861-892b7d883c5d",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "8469d609-f305-45d1-857e-07b485029fbd",
+        "toNodeId": "1bda28f0-76f7-40ef-b14e-3102ea69e782",
+        "type": "ACCEPTS",
+        "label": "ACCEPTS",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "2f00c678-d70d-4381-b648-27260ec6181a",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "8469d609-f305-45d1-857e-07b485029fbd",
+        "toNodeId": "823e5284-e249-4191-92bf-3c8388a576dd",
+        "type": "RETURNS",
+        "label": "RETURNS",
+        "fromHandle": "right",
+        "toHandle": "left"
+    },
+    {
+        "id": "f47515c5-a58b-4f91-bb82-b4a82eae21f3",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "8469d609-f305-45d1-857e-07b485029fbd",
+        "toNodeId": "3abacc9f-8584-4fc8-b074-141a6542407f",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "1494154f-46c5-4c5d-a02b-733ff3fd643f",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "8dba3255-3e9f-4fae-9dce-a3d268da8a11",
+        "toNodeId": "3bb56b69-cbe8-4347-a994-5a0619bf87ba",
+        "type": "RETURNS",
+        "label": "RETURNS",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "856f4555-db91-4ab8-bc21-31753fb60d41",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "8dba3255-3e9f-4fae-9dce-a3d268da8a11",
+        "toNodeId": "ff0d28e5-0280-4b5c-8235-2a2042440312",
+        "type": "ACCEPTS",
+        "label": "ACCEPTS",
+        "fromHandle": "right",
+        "toHandle": "left"
+    },
+    {
+        "id": "b7f12c28-d457-41b1-a90f-908132d71e9d",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "8dba3255-3e9f-4fae-9dce-a3d268da8a11",
+        "toNodeId": "836a75bd-c68d-478d-8212-fc7d52d1172c",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "70e6c05c-2d51-4ddb-853b-c9fe9fd5c4f5",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "9f665d9f-5e01-4ffc-a3cc-934dc8a56c2c",
+        "toNodeId": "0cb5d6f5-da92-4451-afde-ad1ba81d979d",
+        "type": "STORED_IN",
+        "label": "STORED_IN",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "b80ed1c2-b8d3-41fe-a83e-c80eb94a08b8",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "a0d0ffd3-c452-438c-b344-e29b10f9b08d",
+        "toNodeId": "f0e36cbf-703b-473f-a34c-e3824ab12b42",
+        "type": "DERIVED_FROM",
+        "label": "DERIVED_FROM",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "28dfdbc4-2b39-4935-888f-714eeef19b73",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "a77a487c-f9a5-4dbb-b10d-f4175976370b",
+        "toNodeId": "1b64525f-0974-4aac-9c35-0a2a870f7384",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "9c75a383-ac8a-470c-ae98-ee6dfd57717c",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "a77a487c-f9a5-4dbb-b10d-f4175976370b",
+        "toNodeId": "a0d0ffd3-c452-438c-b344-e29b10f9b08d",
+        "type": "ACCEPTS",
+        "label": "ACCEPTS",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "a967b0f0-aae5-4769-9e45-253294089423",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "a77a487c-f9a5-4dbb-b10d-f4175976370b",
+        "toNodeId": "823e5284-e249-4191-92bf-3c8388a576dd",
+        "type": "RETURNS",
+        "label": "RETURNS",
+        "fromHandle": "right",
+        "toHandle": "top"
+    },
+    {
+        "id": "089c6369-20f5-471f-9585-3f024fb2e44c",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "a9fae73b-0136-466d-8d8b-fe8c671ba3ef",
+        "toNodeId": "836a75bd-c68d-478d-8212-fc7d52d1172c",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "94e0ba2d-791c-49c7-b92f-a9bfa9b713f9",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "ad47c6ef-5342-4ed0-8b4f-ebab3aa05540",
+        "toNodeId": "46196b66-85e9-4be0-9522-4dbeaa780b02",
+        "type": "USES",
+        "label": "USES",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "e4cde3aa-e0f7-4037-ac9c-858572f2f9b1",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "be13f657-ff34-4b04-80de-bbc65d687f60",
+        "toNodeId": "f0e36cbf-703b-473f-a34c-e3824ab12b42",
+        "type": "USES",
+        "label": "USES",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "8e1efa53-3ae7-4358-a7dc-2c4677e80e2a",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "c5d23e0d-0cf8-4bc9-b5db-9da4bfc128da",
+        "toNodeId": "836a75bd-c68d-478d-8212-fc7d52d1172c",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "c5259785-49a7-4ce3-ab0e-5c271e442df0",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "c5d23e0d-0cf8-4bc9-b5db-9da4bfc128da",
+        "toNodeId": "823e5284-e249-4191-92bf-3c8388a576dd",
+        "type": "RETURNS",
+        "label": "RETURNS",
+        "fromHandle": "right",
+        "toHandle": "left"
+    },
+    {
+        "id": "d2da247b-3f2a-4beb-95ad-d7b307548449",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "c5d23e0d-0cf8-4bc9-b5db-9da4bfc128da",
+        "toNodeId": "f5513810-cc57-46d3-9389-eb9aa67c4635",
+        "type": "ACCEPTS",
+        "label": "ACCEPTS",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "56ddc8a8-4f59-47a2-ab71-ef7ec21c332f",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "c76f288c-904a-4123-b0eb-123ed1565242",
+        "toNodeId": "1b64525f-0974-4aac-9c35-0a2a870f7384",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "e049d5fe-313f-4f63-ac41-d1df307ffbb9",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "c76f288c-904a-4123-b0eb-123ed1565242",
+        "toNodeId": "6ce2d83d-c49c-4119-9950-37bb6a50f1b8",
+        "type": "RETURNS",
+        "label": "RETURNS",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "0be8dca2-c0b4-4731-9f7a-a0da1fbe293c",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "c7dcb7ed-a493-480f-a407-b3361f6e6305",
+        "toNodeId": "c077cfff-54f6-434a-8c52-6708f546adbf",
+        "type": "USES_CUSTOM_TYPE",
+        "label": "USES_CUSTOM_TYPE",
+        "fromHandle": "",
+        "toHandle": ""
+    },
+    {
+        "id": "1214cff0-4f36-4773-a83f-068d8136cb1d",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "c7dcb7ed-a493-480f-a407-b3361f6e6305",
+        "toNodeId": "46196b66-85e9-4be0-9522-4dbeaa780b02",
+        "type": "USES_TYPE",
+        "label": "USES_TYPE",
+        "fromHandle": "",
+        "toHandle": ""
+    },
+    {
+        "id": "1f552f21-49a3-40c9-bf8a-952972fafc14",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "c7dcb7ed-a493-480f-a407-b3361f6e6305",
+        "toNodeId": "db4a36d6-a534-4c6d-a2e0-9ea6ef97865e",
+        "type": "DERIVED_FROM",
+        "label": "DERIVED_FROM",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "c24589ab-c70d-45fe-90a6-d5da82021ed1",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "c7dcb7ed-a493-480f-a407-b3361f6e6305",
+        "toNodeId": "5be3d8af-3e75-4afd-9134-f168545d1dfd",
+        "type": "USES_CUSTOM_TYPE",
+        "label": "USES_CUSTOM_TYPE",
+        "fromHandle": "",
+        "toHandle": ""
+    },
+    {
+        "id": "92917cbc-980d-4dc4-9e1b-0a173dbbd113",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "d5a4a3c2-5996-486e-9509-32c41d5d1a16",
+        "toNodeId": "7a145069-233d-4ea7-beea-f3784df3f2b3",
+        "type": "CONNECTS_TO",
+        "label": "CONNECTS_TO",
+        "fromHandle": "left",
+        "toHandle": "top"
+    },
+    {
+        "id": "0ece89b9-f9b2-48f9-81ee-35c0cf3cc8eb",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "db4a36d6-a534-4c6d-a2e0-9ea6ef97865e",
+        "toNodeId": "c077cfff-54f6-434a-8c52-6708f546adbf",
+        "type": "USES_CUSTOM_TYPE",
+        "label": "USES_CUSTOM_TYPE",
+        "fromHandle": "",
+        "toHandle": ""
+    },
+    {
+        "id": "1c9c6c89-0f8e-404b-9e59-3a9338461231",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "db4a36d6-a534-4c6d-a2e0-9ea6ef97865e",
+        "toNodeId": "46196b66-85e9-4be0-9522-4dbeaa780b02",
+        "type": "EMBEDS",
+        "label": "EMBEDS",
+        "fromHandle": "top",
+        "toHandle": "bottom"
+    },
+    {
+        "id": "aa932e6e-3c39-45b8-9b00-9c15e6a8d9af",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "db4a36d6-a534-4c6d-a2e0-9ea6ef97865e",
+        "toNodeId": "5be3d8af-3e75-4afd-9134-f168545d1dfd",
+        "type": "USES_CUSTOM_TYPE",
+        "label": "USES_CUSTOM_TYPE",
+        "fromHandle": "",
+        "toHandle": ""
+    },
+    {
+        "id": "b041afe5-46d8-43a4-a0f3-af486380eda7",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "db4a36d6-a534-4c6d-a2e0-9ea6ef97865e",
+        "toNodeId": "6b65e09c-4845-47a2-9f20-4353e7e5996f",
+        "type": "STORED_IN",
+        "label": "STORED_IN",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "12b7ee91-b7c2-48ee-97a1-2140b73e17ea",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "e68687cc-54bb-49bc-8a40-9770165009c5",
+        "toNodeId": "4189c9e5-acbe-4a7c-b13a-f58eb3980539",
+        "type": "INVOKES",
+        "label": "INVOKES",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "e591b89e-786e-4aa0-a849-a71607f52cff",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "e7a76479-6ef0-453d-b154-fe83aa10a4ae",
+        "toNodeId": "7a145069-233d-4ea7-beea-f3784df3f2b3",
+        "type": "CONNECTS_TO",
+        "label": "CONNECTS_TO",
+        "fromHandle": "left",
+        "toHandle": "bottom"
+    },
+    {
+        "id": "30022bf5-cd03-4a9d-bded-38be38985f73",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "ece68193-9da7-4245-98c4-7bb0b0cfa477",
+        "toNodeId": "1bda28f0-76f7-40ef-b14e-3102ea69e782",
+        "type": "ACCEPTS",
+        "label": "ACCEPTS",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "b4186679-8a69-4553-8372-eb45c1d4de84",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "ece68193-9da7-4245-98c4-7bb0b0cfa477",
+        "toNodeId": "3abacc9f-8584-4fc8-b074-141a6542407f",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "dc4ae03d-499f-4332-bd85-b56b15db9af5",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "ece68193-9da7-4245-98c4-7bb0b0cfa477",
+        "toNodeId": "823e5284-e249-4191-92bf-3c8388a576dd",
+        "type": "RETURNS",
+        "label": "RETURNS",
+        "fromHandle": "right",
+        "toHandle": "left"
+    },
+    {
+        "id": "6744d327-64d8-45bd-b293-1e4b05d94aac",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "f0e36cbf-703b-473f-a34c-e3824ab12b42",
+        "toNodeId": "d5a4a3c2-5996-486e-9509-32c41d5d1a16",
+        "type": "STORED_IN",
+        "label": "STORED_IN",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "7b1436bd-9189-4b5f-b7b5-bf1e3f98f9eb",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "f0ef09a0-40b2-49ff-ad42-d3a25c0478e1",
+        "toNodeId": "db4a36d6-a534-4c6d-a2e0-9ea6ef97865e",
+        "type": "EMBEDS",
+        "label": "EMBEDS",
+        "fromHandle": "top",
+        "toHandle": "bottom"
+    },
+    {
+        "id": "d69e7dc1-5091-42c0-ab6d-bd46fbab73da",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "f0ef09a0-40b2-49ff-ad42-d3a25c0478e1",
+        "toNodeId": "e7a76479-6ef0-453d-b154-fe83aa10a4ae",
+        "type": "STORED_IN",
+        "label": "STORED_IN",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "5a5870c6-7160-4cd7-aa5b-f36980d67d5c",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "f291b216-048f-48d2-9d25-96144fba907a",
+        "toNodeId": "1e75376f-ebe8-407b-9d9d-c311ba526bb0",
+        "type": "RETURNS",
+        "label": "RETURNS",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "ae585341-93f0-44cb-a0dc-e6fd95678ade",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "f291b216-048f-48d2-9d25-96144fba907a",
+        "toNodeId": "e68687cc-54bb-49bc-8a40-9770165009c5",
+        "type": "ROUTES_TO",
+        "label": "ROUTES_TO",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "dea7ff1f-1547-4e75-8413-3bd61fb347ac",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "f291b216-048f-48d2-9d25-96144fba907a",
+        "toNodeId": "ff0d28e5-0280-4b5c-8235-2a2042440312",
+        "type": "ACCEPTS",
+        "label": "ACCEPTS",
+        "fromHandle": "right",
+        "toHandle": "left"
+    },
+    {
+        "id": "0653c745-dfff-4e44-864e-430994715cce",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "f5513810-cc57-46d3-9389-eb9aa67c4635",
+        "toNodeId": "46196b66-85e9-4be0-9522-4dbeaa780b02",
+        "type": "DERIVED_FROM",
+        "label": "DERIVED_FROM",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "4ac42291-a9ae-4eb6-bd2e-329664d09946",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "ff0d28e5-0280-4b5c-8235-2a2042440312",
+        "toNodeId": "fffaafe2-d788-40dd-a5d5-eb8801d7b747",
+        "type": "USES_CUSTOM_TYPE",
+        "label": "USES_CUSTOM_TYPE",
+        "fromHandle": "",
+        "toHandle": ""
+    },
+    {
+        "id": "9920db1f-963c-40aa-9e6b-092db38eea68",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "ff0d28e5-0280-4b5c-8235-2a2042440312",
+        "toNodeId": "a1712799-76db-42f1-b65a-579cca8e3cbc",
+        "type": "USES_CUSTOM_TYPE",
+        "label": "USES_CUSTOM_TYPE",
+        "fromHandle": "",
+        "toHandle": ""
+    },
+    {
+        "id": "a0a009f9-7be2-416e-ac4f-790fcd2f0b27",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "ff0d28e5-0280-4b5c-8235-2a2042440312",
+        "toNodeId": "474532fa-3cbd-4c69-903c-2ac925a80a42",
+        "type": "USES_CUSTOM_TYPE",
+        "label": "USES_CUSTOM_TYPE",
+        "fromHandle": "",
+        "toHandle": ""
+    },
+    {
+        "id": "a8febcc5-afed-4763-9a53-4a4b8d0d33ce",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "fe3eafc4-eed5-4a2f-93f8-2395005dfe9c",
+        "toNodeId": "46196b66-85e9-4be0-9522-4dbeaa780b02",
+        "type": "USES_TYPE",
+        "label": "USES_TYPE",
+        "fromHandle": "",
+        "toHandle": ""
+    },
+    {
+        "id": "30bab1ad-530a-44ff-80b2-8064e5f1d043",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "fe3eafc4-eed5-4a2f-93f8-2395005dfe9c",
+        "toNodeId": "5be3d8af-3e75-4afd-9134-f168545d1dfd",
+        "type": "USES_CUSTOM_TYPE",
+        "label": "USES_CUSTOM_TYPE",
+        "fromHandle": "",
+        "toHandle": ""
+    },
+    {
+        "id": "1e510508-ade3-4f39-a9d0-ff2d0cd5df38",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "3648e8e8-1687-4388-a128-5a469bd6b0d2",
+        "toNodeId": "823e5284-e249-4191-92bf-3c8388a576dd",
+        "type": "RETURNS",
+        "label": "RETURNS",
+        "fromHandle": "right",
+        "toHandle": "bottom"
+    },
+    {
+        "id": "b2832a1a-2de2-46e6-a63d-ad01fb32e708",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "fe3eafc4-eed5-4a2f-93f8-2395005dfe9c",
+        "toNodeId": "c077cfff-54f6-434a-8c52-6708f546adbf",
+        "type": "USES_CUSTOM_TYPE",
+        "label": "USES_CUSTOM_TYPE",
+        "fromHandle": "",
+        "toHandle": ""
+    },
+    {
+        "id": "bcd4835b-1e2d-442a-85f9-746702f6886a",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "fe3eafc4-eed5-4a2f-93f8-2395005dfe9c",
+        "toNodeId": "db4a36d6-a534-4c6d-a2e0-9ea6ef97865e",
+        "type": "DERIVED_FROM",
+        "label": "DERIVED_FROM",
+        "fromHandle": "left",
+        "toHandle": "right"
+    },
+    {
+        "id": "3f4972a8-e4d1-42b3-a95b-fb70ca68bc27",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "fromNodeId": "f0950af8-0739-4b24-986c-ee70f3f91289",
+        "toNodeId": "f0ef09a0-40b2-49ff-ad42-d3a25c0478e1",
+        "type": "USES",
+        "label": "USES",
+        "fromHandle": "left",
+        "toHandle": "right"
+    }
+]

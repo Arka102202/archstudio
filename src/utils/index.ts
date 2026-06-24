@@ -21,3 +21,4 @@ export { createChatSession, loadChatSessions, loadChatMessages, saveChatMessage,
 export { sendChatMessage } from './chatApi'
 export { executeCanvasActions } from './executeCanvasActions'
 export type { ExecutionResult } from './executeCanvasActions'
+export { nodeRowToRfNode, edgeRowToRfEdge } from './rfConverters'

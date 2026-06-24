@@ -1,0 +1,1005 @@
+[
+    {
+        "id": "0cb5d6f5-da92-4451-afde-ad1ba81d979d",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "TABLE",
+        "label": "Accessor Table",
+        "position": {
+            "x": 751.1666666666664,
+            "y": 3393.383891767555
+        },
+        "size": {
+            "w": 220,
+            "h": 160
+        },
+        "data": "{\"id\":\"0cb5d6f5-da92-4451-afde-ad1ba81d979d\",\"type\":\"TABLE\",\"label\":\"Accessor Table\",\"tableName\":\"accessor\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"entityId\":\"9f665d9f-5e01-4ffc-a3cc-934dc8a56c2c\",\"dbNodeId\":null,\"position\":{\"x\":751.1666666666664,\"y\":3393.383891767555},\"size\":{\"w\":220,\"h\":160},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"customQueries\":[{\"id\":\"20186165-9fe5-42b0-9afb-f694e75a8254\",\"methodName\":\"insert\",\"description\":\"#### Custom Query — `DynamicTableService.insert()`\\n \\n```java\\npublic JsonNode insert(String tableName, JsonNode resolvedData) {\\n \\n    // Extract field names from JsonNode keys\\n    List<String> columns = new ArrayList<>();\\n    resolvedData.fieldNames().forEachRemaining(columns::add);\\n \\n    String colClause = String.join(\\\", \\\", columns);\\n    String valClause = columns.stream().map(c -> \\\"?\\\").collect(Collectors.joining(\\\", \\\"));\\n \\n    String sql = \\\"INSERT INTO \\\" + tableName + \\\" (\\\" + colClause + \\\") VALUES (\\\" + valClause + \\\")\\\";\\n \\n    // Execute and fetch generated id\\n    KeyHolder keyHolder = new GeneratedKeyHolder();\\n    jdbcTemplate.update(con -> {\\n        PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);\\n        for (int i = 0; i < columns.size(); i++) {\\n            ps.setObject(i + 1, extractValue(resolvedData.get(columns.get(i))));\\n        }\\n        return ps;\\n    }, keyHolder);\\n \\n    String generatedId = keyHolder.getKeys().get(\\\"id\\\").toString();\\n    return fetchById(tableName, generatedId);\\n}\\n \\n// Unwrap JsonNode to a plain Java type for JDBC\\nprivate Object extractValue(JsonNode node) {\\n    if (node == null || node.isNull())     return null;\\n    if (node.isBoolean())                  return node.booleanValue();\\n    if (node.isInt())                      return node.intValue();\\n    if (node.isLong())                     return node.longValue();\\n    if (node.isDouble())                   return node.doubleValue();\\n    if (node.isArray() || node.isObject()) return node.toString(); // stored as JSON string\\n    return node.asText();\\n}\\n```\",\"targetEntityId\":null,\"type\":\"AI\",\"queryString\":null,\"aiPrompt\":{\"description\":\"> `tableName` is always `obj_<objectId>` — resolved by `TableResolver` before this call. Never interpolated from user input directly.\\n> `JsonNode` comes from Jackson (`com.fasterxml.jackson.databind.JsonNode`) — already available in any Spring Boot project.\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":true},\"params\":[{\"name\":\"tableName\",\"type\":\"STRING\",\"customTypeId\":null,\"arraySubType\":null,\"arrayCustomTypeId\":null,\"isCollection\":false,\"enumValues\":null},{\"name\":\"resolvedData\",\"type\":\"JSON_NODE\",\"customTypeId\":null,\"arraySubType\":null,\"arrayCustomTypeId\":null,\"isCollection\":false,\"enumValues\":null}],\"returnType\":null,\"nativeQuery\":false,\"modifying\":false,\"cache\":null}]}",
+        "createdAt": 1779031504199,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "0e3c48af-012c-4467-8db7-9cf8dff3d35d",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "SERVICE",
+        "label": "Accessor Service",
+        "position": {
+            "x": 1441.4999999999998,
+            "y": 3362.717225100888
+        },
+        "size": {
+            "w": 178,
+            "h": 219
+        },
+        "data": "{\"id\":\"0e3c48af-012c-4467-8db7-9cf8dff3d35d\",\"type\":\"SERVICE\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Accessor Service\",\"methods\":[{\"id\":\"af8e24e0-ab94-42a4-9706-e75753625569\",\"name\":\"create\",\"returnType\":{\"type\":null,\"entityTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":false,\"isOptional\":false,\"isVoid\":false},\"params\":[{\"name\":\"objectId\",\"type\":\"UUID\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null},{\"name\":\"data\",\"type\":\"JSON_NODE\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":false,\"async\":false,\"aiPrompt\":{\"description\":\"AccessorService for create\\n│\\n├── ObjectMetaService.getActiveObject(objectId)\\n│       → fetches Object + all its Fields with Validations + Predicates\\n│       → throws OBJECT_NOT_FOUND / OBJECT_NOT_ACTIVE\\n│\\n├── ValidationEngine.validate(fields, data)\\n│       → checks required fields present\\n│       → for each fieldId in data:\\n│           · verifies fieldId belongs to this Object\\n│           · casts value to field's declared type\\n│           · runs each attached Validation → Predicate against the value\\n│       → throws UNKNOWN_FIELD / REQUIRED_FIELD_MISSING /\\n│               TYPE_CAST_ERROR / FIELD_VALIDATION_FAILED\\n│\\n└── DynamicTableService.insert(tableName, resolvedData)\\n        → FieldResolver maps fieldId → column name\\n        → builds INSERT query via QueryBuilder\\n        → executes against obj_<objectId>\\n        → returns the saved record\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":true},\"throwsErrors\":[]}],\"dependencyIds\":[],\"position\":{\"x\":1441.4999999999998,\"y\":3362.717225100888},\"size\":{\"w\":178,\"h\":219},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"config\":{\"classLevelTransactional\":true,\"classLevelAsync\":false,\"generateInterface\":true}}",
+        "createdAt": 1779031059330,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "0f574419-f726-44fa-b7a0-864b5545d46c",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "DTO",
+        "label": "Accessor Create Req DTO",
+        "position": {
+            "x": 2760.4001912972144,
+            "y": 3367.371404312357
+        },
+        "size": {
+            "w": 210,
+            "h": 140
+        },
+        "data": "{\"id\":\"0f574419-f726-44fa-b7a0-864b5545d46c\",\"type\":\"DTO\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Accessor Create Req DTO\",\"purpose\":\"REQUEST\",\"origin\":\"CUSTOM\",\"entitySources\":[],\"fields\":[{\"id\":\"7e862aa1-fc3a-445f-9c13-3f96bf5e039e\",\"name\":\"objectId\",\"type\":\"UUID\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"mapKeyType\":null,\"mapKeyEntityTypeId\":null,\"mapKeyCustomTypeId\":null,\"mapValueType\":null,\"mapValueEntityTypeId\":null,\"mapValueCustomTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":null,\"enumValues\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"34316ee8-5966-40ce-9432-566054024e4f\",\"name\":\"data\",\"type\":\"JSON_NODE\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"mapKeyType\":null,\"mapKeyEntityTypeId\":null,\"mapKeyCustomTypeId\":null,\"mapValueType\":null,\"mapValueEntityTypeId\":null,\"mapValueCustomTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":null,\"enumValues\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}}],\"position\":{\"x\":2760.4001912972144,\"y\":3367.371404312357},\"size\":{\"w\":210,\"h\":140},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"config\":{\"lombokStyle\":\"BOTH\",\"validationEnabled\":false}}",
+        "createdAt": 1779032432530,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "161ba297-f440-4626-8079-9f32bf3b1978",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "GET Object by Id",
+        "position": {
+            "x": 2192.6917796295647,
+            "y": 2741.988290193767
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"161ba297-f440-4626-8079-9f32bf3b1978\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"GET Object by Id\",\"method\":\"GET\",\"path\":\"/{id}\",\"position\":{\"x\":2192.6917796295647,\"y\":2741.988290193767},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":false,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[{\"name\":\"id\",\"type\":\"UUID\"}],\"queryParams\":[],\"bodyDTOId\":null},\"response\":{\"successCode\":200,\"returnDTOId\":\"1e75376f-ebe8-407b-9d9d-c311ba526bb0\",\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778688181563,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "1b64525f-0974-4aac-9c35-0a2a870f7384",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "CONTROLLER",
+        "label": "Predicate Controller",
+        "position": {
+            "x": 1884.2892866404923,
+            "y": 446.08625622628165
+        },
+        "size": {
+            "w": 220,
+            "h": 100
+        },
+        "data": "{\"id\":\"1b64525f-0974-4aac-9c35-0a2a870f7384\",\"type\":\"CONTROLLER\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Predicate Controller\",\"basePath\":\"/api/v1/predicate\",\"position\":{\"x\":1884.2892866404923,\"y\":446.08625622628165},\"size\":{\"w\":220,\"h\":100},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"swaggerTags\":[],\"authRuleId\":null,\"errorHandlerConfig\":{\"errors\":[{\"description\":\"Invalid value for operation or type\",\"httpStatus\":400,\"message\":\"INVALID_ENUM\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"Invalid value for operation or type\"}],\"id\":\"67f58b43-5f63-41be-b4f1-8785866de4be\"},{\"description\":\"type is REGEX but operation is not PATTERN\",\"httpStatus\":400,\"message\":\"INVALID_OPERATION_FOR_TYPE\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"type is REGEX but operation is not PATTERN\"}],\"id\":\"4f2001e6-137a-43fc-a166-ae6fd88b7701\"},{\"description\":\"No predicate found for the given id\",\"httpStatus\":404,\"message\":\"PREDICATE_NOT_FOUND\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"No predicate found for the given id\"}],\"id\":\"3b706c7c-eff8-440a-981a-6f1211a6306c\"},{\"description\":\"A predicate with this name already exists\",\"httpStatus\":409,\"message\":\"DUPLICATE_NAME\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"A predicate with this name already exists\"}],\"id\":\"5c4cdf32-bc7c-407d-8618-8c3c68231f87\"}],\"includeTimestamp\":true,\"includeRequestPath\":true},\"config\":{\"crossOrigin\":false,\"apiVersion\":null,\"requestLogging\":true}}",
+        "createdAt": 1778389528882,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "1bda28f0-76f7-40ef-b14e-3102ea69e782",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "DTO",
+        "label": "Field request DTO",
+        "position": {
+            "x": 1734.3918512712644,
+            "y": 2322.923183804841
+        },
+        "size": {
+            "w": 210,
+            "h": 140
+        },
+        "data": "{\"id\":\"1bda28f0-76f7-40ef-b14e-3102ea69e782\",\"type\":\"DTO\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Field request DTO\",\"purpose\":\"REQUEST\",\"origin\":\"DERIVED\",\"entitySources\":[{\"entityId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"includeFields\":[],\"excludeFields\":[]}],\"fields\":[{\"id\":\"c17d4db6-ca53-46d6-9a5d-49e06d6da539\",\"name\":\"name\",\"type\":\"STRING\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"enumValues\":null,\"validations\":[{\"type\":\"NOT_NULL\",\"value\":\"\",\"message\":\"\"}],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"e38beb9e-ad77-4fd7-a04f-0cb1a33d294f\",\"name\":\"type\",\"type\":\"ENUM\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"enumValues\":[\"STRING\",\"INTEGER\",\"FLOAT\",\"BOOLEAN\",\"DATE\",\"DATETIME\",\"JSON\",\"ARRAY\",\"ASSOCIATION\"],\"validations\":[{\"type\":\"NOT_NULL\",\"value\":\"\",\"message\":\"\"}],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"491fd898-c3fe-4396-b084-6559db2d54fe\",\"name\":\"subtype\",\"type\":\"ENUM\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"enumValues\":[\"STRING\",\"INTEGER\",\"FLOAT\",\"BOOLEAN\",\"DATE\",\"DATETIME\",\"JSON\",\"ASSOCIATION\"],\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"c0ea876c-30ee-4ef2-a834-b5edfa27d6c6\",\"name\":\"validations\",\"type\":\"ARRAY\",\"arraySubType\":\"UUID\",\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"enumValues\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"ae001548-d08e-4955-a236-7679360d144d\",\"name\":\"meta\",\"type\":\"CUSTOM_TYPE_REF\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":\"5be3d8af-3e75-4afd-9134-f168545d1dfd\",\"entityTypeInvalid\":false,\"sourceEntityId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"enumValues\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"3ca16f3e-e6f6-465b-89a2-a4fbef45b533\",\"name\":\"option\",\"type\":\"CUSTOM_TYPE_REF\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":\"c077cfff-54f6-434a-8c52-6708f546adbf\",\"entityTypeInvalid\":false,\"sourceEntityId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"enumValues\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}}],\"position\":{\"x\":1734.3918512712644,\"y\":2322.923183804841},\"size\":{\"w\":210,\"h\":140},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"config\":{\"lombokStyle\":\"BOTH\",\"validationEnabled\":false}}",
+        "createdAt": 1778467194008,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "1e75376f-ebe8-407b-9d9d-c311ba526bb0",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "DTO",
+        "label": "Object Response DTO",
+        "position": {
+            "x": 1699.2764684544304,
+            "y": 2561.2099608499943
+        },
+        "size": {
+            "w": 210,
+            "h": 140
+        },
+        "data": "{\"id\":\"1e75376f-ebe8-407b-9d9d-c311ba526bb0\",\"type\":\"DTO\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Object Response DTO\",\"purpose\":\"RESPONSE\",\"origin\":\"DERIVED\",\"entitySources\":[{\"entityId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"includeFields\":[],\"excludeFields\":[]}],\"fields\":[{\"id\":\"f1e0f06a-0b16-48c4-a54a-6b57265f8035\",\"name\":\"name\",\"type\":\"STRING\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"enumValues\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"26bc1bdf-4c4b-4903-acd4-2b59993cab85\",\"name\":\"tableName\",\"type\":\"STRING\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"enumValues\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"6810c4db-3d31-4c09-86ce-1df2fb997678\",\"name\":\"status\",\"type\":\"ENUM\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"enumValues\":[\"DRAFT\",\"ACTIVE\",\"DEPRECATED\"],\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"d36b3c79-6a8b-4ab7-9de0-9802f5202dfd\",\"name\":\"fields\",\"type\":\"ARRAY\",\"arraySubType\":\"ENTITY_REF\",\"arrayEntityTypeId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"enumValues\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}}],\"position\":{\"x\":1699.2764684544304,\"y\":2561.2099608499943},\"size\":{\"w\":210,\"h\":140},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"config\":{\"lombokStyle\":\"BOTH\",\"validationEnabled\":false}}",
+        "createdAt": 1778687420351,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "27443e6f-c464-45ee-acfa-98b11d0fd50e",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "GET field by ID",
+        "position": {
+            "x": 2198.0557079381606,
+            "y": 1991.8099993139729
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"27443e6f-c464-45ee-acfa-98b11d0fd50e\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"GET field by ID\",\"method\":\"GET\",\"path\":\"/{id}\",\"position\":{\"x\":2198.0557079381606,\"y\":1991.8099993139729},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":false,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[{\"name\":\"id\",\"type\":\"UUID\"}],\"queryParams\":[],\"bodyDTOId\":null},\"response\":{\"successCode\":200,\"returnDTOId\":\"c7dcb7ed-a493-480f-a407-b3361f6e6305\",\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778466994321,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "2d1453c4-387b-44cc-86ac-1a29efd4e7ba",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "CREATE validation API",
+        "position": {
+            "x": 2217.328909550458,
+            "y": 1046.3110199486807
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"2d1453c4-387b-44cc-86ac-1a29efd4e7ba\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"CREATE validation API\",\"method\":\"POST\",\"path\":\"/\",\"position\":{\"x\":2217.328909550458,\"y\":1046.3110199486807},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":false,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[],\"queryParams\":[],\"bodyDTOId\":\"f5513810-cc57-46d3-9389-eb9aa67c4635\"},\"response\":{\"successCode\":201,\"returnDTOId\":\"823e5284-e249-4191-92bf-3c8388a576dd\",\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778425952805,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "3abacc9f-8584-4fc8-b074-141a6542407f",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "CONTROLLER",
+        "label": "Field Controller",
+        "position": {
+            "x": 1865.8802959966436,
+            "y": 2109.594550506588
+        },
+        "size": {
+            "w": 220,
+            "h": 100
+        },
+        "data": "{\"id\":\"3abacc9f-8584-4fc8-b074-141a6542407f\",\"type\":\"CONTROLLER\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Field Controller\",\"basePath\":\"/api/v1/field\",\"position\":{\"x\":1865.8802959966436,\"y\":2109.594550506588},\"size\":{\"w\":220,\"h\":100},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"swaggerTags\":[],\"authRuleId\":null,\"errorHandlerConfig\":{\"errors\":[{\"description\":\"Missing required fields: name, type\",\"httpStatus\":400,\"message\":\"VALIDATION_ERROR\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"Missing required fields: name, type\"}],\"id\":\"09dffb9e-60c9-47cf-82fc-14d9c6ae6c33\"},{\"description\":\"type or subtype is not a valid value\",\"httpStatus\":400,\"message\":\"INVALID_ENUM\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"type or subtype is not a valid value\"}],\"id\":\"48028b24-b079-4f72-984f-e284c50f4fe9\"},{\"description\":\"subtype is provided without type: ARRAY, or subtype is ARRAY\",\"httpStatus\":400,\"message\":\"INVALID_SUBTYPE\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"subtype is provided without type: ARRAY, or subtype is ARRAY\"}],\"id\":\"cd5f8039-516f-49d4-9a1e-c58cff4c9b7e\"},{\"description\":\"meta is provided but type/subtype is not ASSOCIATION\",\"httpStatus\":400,\"message\":\"META_NOT_ALLOWED\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"meta is provided but type/subtype is not ASSOCIATION\"}],\"id\":\"9ec0ff33-f45b-401d-bbdb-1319dda16edc\"},{\"description\":\"type or subtype is ASSOCIATION but meta is missing\",\"httpStatus\":400,\"message\":\"META_REQUIRED\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"type or subtype is ASSOCIATION but meta is missing\"}],\"id\":\"60ca973d-f792-4ce5-beb9-9aaa0c82ae5c\"},{\"description\":\"meta.displayType is not pill or card, or displayFields is not a non-empty array\",\"httpStatus\":400,\"message\":\"INVALID_META\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"meta.displayType is not pill or card, or displayFields is not a non-empty array\"}],\"id\":\"9ec5d084-48dc-4282-a5f7-62043dca0845\"},{\"description\":\"options is provided but type is not ARRAY\",\"httpStatus\":400,\"message\":\"OPTIONS_NOT_ALLOWED\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"options is provided but type is not ARRAY\"}],\"id\":\"4ccecaca-d2a7-484e-9961-6444d44157fc\"},{\"description\":\"type is ARRAY but options is missing\",\"httpStatus\":400,\"message\":\"OPTIONS_REQUIRED\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"type is ARRAY but options is missing\"}],\"id\":\"11856c11-3f55-41e6-b47b-66dabc266d59\"},{\"description\":\"options.type is not static or dynamic\",\"httpStatus\":400,\"message\":\"INVALID_OPTIONS_TYPE\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"options.type is not static or dynamic\"}],\"id\":\"b6af0104-3b12-4bb7-8ba1-572a0c4ce160\"},{\"description\":\"options.type is static but values is empty or missing\",\"httpStatus\":400,\"message\":\"STATIC_VALUES_REQUIRED\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"options.type is static but values is empty or missing\"}],\"id\":\"3375d4a4-1374-40c2-8fc5-41dc5d1c2d71\"},{\"description\":\"options.sourceObjectId does not reference an existing Object\",\"httpStatus\":404,\"message\":\"SOURCE_OBJECT_NOT_FOUND\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"options.sourceObjectId does not reference an existing Object\"}],\"id\":\"d8ec9a00-8781-4cb8-b2fc-c9a60adc1262\"},{\"description\":\"One or more validations IDs do not exist\",\"httpStatus\":404,\"message\":\"VALIDATION_NOT_FOUND\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"One or more validations IDs do not exist\"}],\"id\":\"059fa873-ea19-4d5a-b211-48f55ee9bb2e\"},{\"description\":\"A referenced validation's type does not match the field's type\",\"httpStatus\":400,\"message\":\"VALIDATION_TYPE_MISMATCH\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"A referenced validation's type does not match the field's type\"}],\"id\":\"d99b66cd-56f3-4067-afef-f1d45ede49d1\"},{\"description\":\"No field found for the given id\",\"httpStatus\":404,\"message\":\"FIELD_NOT_FOUND\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"No field found for the given id\"}],\"id\":\"7e53e0e9-820b-4b6c-895c-4a220725de6f\"}],\"includeTimestamp\":true,\"includeRequestPath\":true},\"config\":{\"crossOrigin\":false,\"apiVersion\":null,\"requestLogging\":true}}",
+        "createdAt": 1778464261535,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "3bb56b69-cbe8-4347-a994-5a0619bf87ba",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "DTO",
+        "label": "Validation response DTO",
+        "position": {
+            "x": 1724.2911754255488,
+            "y": 1003.488268046867
+        },
+        "size": {
+            "w": 210,
+            "h": 140
+        },
+        "data": "{\"id\":\"3bb56b69-cbe8-4347-a994-5a0619bf87ba\",\"type\":\"DTO\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Validation response DTO\",\"purpose\":\"RESPONSE\",\"origin\":\"CUSTOM\",\"entitySources\":[{\"entityId\":\"46196b66-85e9-4be0-9522-4dbeaa780b02\",\"includeFields\":[],\"excludeFields\":[]}],\"fields\":[{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"name\",\"type\":\"STRING\",\"validations\":[],\"enumValues\":null,\"id\":\"798c7fd3-ff4d-404f-81b8-d601242d2d2e\"},{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"type\",\"type\":\"ENUM\",\"enumValues\":[\"NOT_NULL\",\"NOT_BLANK\",\"MIN\",\"MAX\",\"SIZE\",\"EMAIL\",\"PATTERN\",\"POSITIVE\"],\"validations\":[],\"id\":\"2768e9e4-59e0-45da-a170-d7911760f0f6\"},{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"value\",\"type\":\"STRING\",\"validations\":[],\"enumValues\":null,\"id\":\"40074d9e-214b-455b-813a-f413cfb5115c\"},{\"id\":\"ead4d9c1-aa5e-4406-bff1-d094bdb0a93d\",\"name\":\"predicate\",\"type\":\"ENTITY_REF\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":null,\"enumValues\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}}],\"position\":{\"x\":1724.2911754255488,\"y\":1003.488268046867},\"size\":{\"w\":210,\"h\":140},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"config\":{\"lombokStyle\":\"BOTH\",\"validationEnabled\":false}}",
+        "createdAt": 1778425846490,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "3c5dc944-7c9f-4436-94b0-b015c9b9525a",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "TABLE",
+        "label": "Validation Table",
+        "position": {
+            "x": 610.4747124293244,
+            "y": 1268.0995340405875
+        },
+        "size": {
+            "w": 220,
+            "h": 160
+        },
+        "data": "{\"id\":\"3c5dc944-7c9f-4436-94b0-b015c9b9525a\",\"type\":\"TABLE\",\"label\":\"Validation Table\",\"tableName\":\"validation\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"entityId\":\"46196b66-85e9-4be0-9522-4dbeaa780b02\",\"dbNodeId\":\"7a145069-233d-4ea7-beea-f3784df3f2b3\",\"position\":{\"x\":610.4747124293244,\"y\":1268.0995340405875},\"size\":{\"w\":220,\"h\":160},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"customQueries\":[{\"id\":\"1874f509-a7f3-4807-80cf-4d88114f19e1\",\"methodName\":\"listAll\",\"description\":\"Dynamically builds and executes a paginated, filterable, sortable query over the validation table based on a recursive FilterGroup, optional global search key, and explicit search field IDs.\",\"targetEntityId\":\"46196b66-85e9-4be0-9522-4dbeaa780b02\",\"type\":\"AI\",\"queryString\":null,\"aiPrompt\":{\"description\":\"Generate a dynamic JPA Criteria (or Specification) query that returns a Page<Validation> filtered by a recursive FilterGroup tree, narrowed by an optional global searchKey across the field IDs listed in searchBy, sorted by the SortCriteria list, and paginated using the Pagination input.\",\"businessRules\":\"INPUTS\\n- filter: FilterGroup { logicalOp: AND|OR, conditions: FilterCondition[], filters: FilterGroup[] } — recursive. May be null/empty (no filtering).\\n- FilterCondition { field: UUID (Field id, resolves to a column on Validation), operator: EQ|NEQ|GT|GTE|LT|LTE|IN|NOT_IN|LIKE|IS_NULL|IS_NOT_NULL, value: any }.\\n- searchBy: UUID[] of Field ids. When searchKey is non-blank, build an OR of LIKE '%searchKey%' over only these fields. If searchBy is empty/null, ignore searchKey.\\n- searchKey: free-text. Trim; treat blank as absent.\\n- sorting: SortCriteria[] { field: UUID, direction: ASC|DESC }. Apply in order. Ignore unknown field ids.\\n- pagination: Pagination { page (0-based), page_size }. Required. Defaults: page=0, page_size=20. Cap page_size at 100.\\n\\nVALIDATION ENTITY COLUMNS\\n- name (STRING, UNIQUE, NOT NULL)\\n- type (ENUM, NOT NULL)\\n- value (STRING, NULLABLE)\\n- predicate_id (FK → predicate.id, NULLABLE)\\n- id (UUID, PK)\\n- created_at, updated_at (auditing enabled)\\n\\nTRANSLATION RULES\\n- Resolve every field UUID to its Validation column via the Field registry (name → column). If a UUID does not resolve, skip that condition (do not throw).\\n- Combine all entries inside a single FilterGroup (its conditions AND its nested filters) using the group's logicalOp.\\n- Recurse into nested filters. Each nested group is wrapped in its own parentheses before being combined with the parent group's logicalOp.\\n- Operator mapping: EQ →= , NEQ →<>, GT →>, GTE →>=, LT →<, LTE →<=, IN →IN (...), NOT_IN →NOT IN (...), LIKE →LIKE '%value%' (escape % and _), IS_NULL →IS NULL (no value), IS_NOT_NULL →IS NOT NULL (no value).\\n- IN / NOT_IN expect an array value; reject single scalar by skipping that condition.\\n- LIKE only valid for STRING/TEXT columns (name, value); for non-string columns, skip.\\n- The global searchKey filter is composed as (col1 LIKE :k OR col2 LIKE :k OR ...) over searchBy and AND-ed with the FilterGroup root.\\n- Always use bound parameters — never inline literals. Sanitize % and _ in LIKE values.\\n- Apply sorting AFTER filtering. If sorting is empty, default to ORDER BY created_at DESC (auditing is enabled on Validation).\",\"edgeCases\":\"- Null filter / empty conditions and filters → no WHERE clause from filter tree.\\n- An empty FilterGroup nested in a parent → emit nothing for that node, do not produce '() AND ...'.\\n- searchBy non-empty but searchKey blank → ignore search entirely.\\n- searchKey non-blank but searchBy empty → ignore search entirely (do not full-table LIKE).\\n- IS_NULL / IS_NOT_NULL must ignore the value field even if present.\\n- IN / NOT_IN with empty array → skip the condition (do not generate 'IN ()' which is invalid SQL).\\n- Unknown operator or unresolvable field UUID → skip that condition silently and log at DEBUG.\\n- Mixing AND and OR is handled purely via grouping — never flatten nested groups.\\n- page < 0 → clamp to 0. page_size <= 0 → use default 20.\\n- LIKE values: escape '%', '_', '\\\\\\\\' before binding; use ESCAPE '\\\\\\\\' in the predicate.\\n- Type coercion: convert FilterCondition.value to the column's Java type (UUID for predicate_id, enum for type, String for name/value) before binding; if coercion fails, skip the condition.\\n- Always count with the same predicate tree applied — never return a stale total.\",\"expectedBehaviour\":\"Given the example input { logicalOp: AND, conditions: [ {status,EQ,'active'}, {age,GTE,18} ], filters: [ { logicalOp: OR, conditions: [ {role,IN,['admin','mod']}, {country,EQ,'IN'} ], filters: [] } ] } the generated WHERE clause must be exactly: (status = :p1 AND age >= :p2) AND (role IN (:p3) OR country = :p4). Result is a Page<Validation> respecting pagination, sorting, and an accurate total count. No SQL injection is possible — all values are bound parameters.\",\"aiGenerate\":true},\"params\":[{\"name\":\"searchBy\",\"type\":\"ARRAY\",\"arraySubType\":\"UUID\",\"isCollection\":true},{\"name\":\"searchKey\",\"type\":\"STRING\",\"isCollection\":false},{\"name\":\"sorting\",\"type\":\"ARRAY\",\"arraySubType\":\"CUSTOM_TYPE_REF\",\"arrayCustomTypeId\":\"fffaafe2-d788-40dd-a5d5-eb8801d7b747\",\"isCollection\":true},{\"name\":\"pagination\",\"type\":\"CUSTOM_TYPE_REF\",\"customTypeId\":\"a1712799-76db-42f1-b65a-579cca8e3cbc\",\"isCollection\":false},{\"name\":\"filter\",\"type\":\"CUSTOM_TYPE_REF\",\"customTypeId\":\"474532fa-3cbd-4c69-903c-2ac925a80a42\",\"isCollection\":false}],\"returnType\":{\"entityId\":\"46196b66-85e9-4be0-9522-4dbeaa780b02\",\"isList\":false,\"isPage\":true,\"isOptional\":false,\"projectionClass\":\"\"},\"nativeQuery\":false,\"modifying\":false,\"cache\":null}]}",
+        "createdAt": 1778435805037,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "4189c9e5-acbe-4a7c-b13a-f58eb3980539",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "SERVICE",
+        "label": "Object Service",
+        "position": {
+            "x": 1417.4060743336718,
+            "y": 2735.485569757916
+        },
+        "size": {
+            "w": 160,
+            "h": 214
+        },
+        "data": "{\"id\":\"4189c9e5-acbe-4a7c-b13a-f58eb3980539\",\"type\":\"SERVICE\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Object Service\",\"methods\":[{\"id\":\"c6a2b60f-e76e-48f2-9b32-3bc235aac9ed\",\"name\":\"listAll\",\"returnType\":{\"type\":\"ENTITY_REF\",\"entityTypeId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":true,\"isOptional\":false,\"isVoid\":false},\"params\":[{\"name\":\"searchBy\",\"type\":\"ARRAY\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":\"UUID\",\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null},{\"name\":\"searchKey\",\"type\":\"STRING\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null},{\"name\":\"sorting\",\"type\":\"ARRAY\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":\"CUSTOM_TYPE_REF\",\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":\"fffaafe2-d788-40dd-a5d5-eb8801d7b747\",\"isPageable\":false,\"enumValues\":null},{\"name\":\"pagination\",\"type\":\"CUSTOM_TYPE_REF\",\"entityTypeId\":null,\"customTypeId\":\"a1712799-76db-42f1-b65a-579cca8e3cbc\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null},{\"name\":\"filter\",\"type\":\"CUSTOM_TYPE_REF\",\"entityTypeId\":null,\"customTypeId\":\"474532fa-3cbd-4c69-903c-2ac925a80a42\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":false,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]},{\"id\":\"55c23a2b-b764-42a0-a457-a55f4f45be47\",\"name\":\"findById\",\"returnType\":{\"type\":\"ENTITY_REF\",\"entityTypeId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":false,\"isOptional\":true,\"isVoid\":false},\"params\":[{\"name\":\"id\",\"type\":\"UUID\",\"entityTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":false,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]},{\"id\":\"3d329363-e474-48c9-914c-76b561ee19ea\",\"name\":\"create\",\"returnType\":{\"type\":\"ENTITY_REF\",\"entityTypeId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":false,\"isOptional\":false,\"isVoid\":false},\"params\":[{\"name\":\"object\",\"type\":\"ENTITY_REF\",\"entityTypeId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":true,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]},{\"id\":\"03775c85-9eda-4345-bfdf-c585acd02aa3\",\"name\":\"update\",\"returnType\":{\"type\":\"ENTITY_REF\",\"entityTypeId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":false,\"isOptional\":false,\"isVoid\":false},\"params\":[{\"name\":\"id\",\"type\":\"UUID\",\"entityTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isPageable\":false,\"enumValues\":null},{\"name\":\"object\",\"type\":\"ENTITY_REF\",\"entityTypeId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":true,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]},{\"id\":\"0df871e7-4ffa-4fb8-a574-51173c021e1d\",\"name\":\"delete\",\"returnType\":{\"type\":null,\"entityTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":false,\"isOptional\":false,\"isVoid\":true},\"params\":[{\"name\":\"id\",\"type\":\"UUID\",\"entityTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":true,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]}],\"dependencyIds\":[],\"position\":{\"x\":1417.4060743336718,\"y\":2735.485569757916},\"size\":{\"w\":160,\"h\":214},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"config\":{\"classLevelTransactional\":true,\"classLevelAsync\":false,\"generateInterface\":true}}",
+        "createdAt": 1778687321539,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "46196b66-85e9-4be0-9522-4dbeaa780b02",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "ENTITY",
+        "label": "Validation",
+        "position": {
+            "x": 1067.491033106138,
+            "y": 1260.05446005539
+        },
+        "size": {
+            "w": 240,
+            "h": 180
+        },
+        "data": "{\"id\":\"46196b66-85e9-4be0-9522-4dbeaa780b02\",\"type\":\"ENTITY\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Validation\",\"tableName\":\"validation\",\"position\":{\"x\":1067.491033106138,\"y\":1260.05446005539},\"size\":{\"w\":240,\"h\":180},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"fields\":[{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"id\",\"type\":\"UUID\",\"constraint\":\"PK\",\"nullable\":false,\"enumValues\":null,\"id\":\"92b6aced-9a35-44d0-8f2d-6d57054b22e0\"},{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"name\",\"type\":\"STRING\",\"constraint\":\"UNIQUE\",\"nullable\":false,\"enumValues\":null,\"id\":\"398d298f-ca55-4882-9f01-6cb03211c0cb\"},{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"type\",\"type\":\"ENUM\",\"constraint\":\"NONE\",\"nullable\":false,\"enumValues\":{\"values\":[\"NOT_NULL\",\"NOT_BLANK\",\"MIN\",\"MAX\",\"SIZE\",\"EMAIL\",\"PATTERN\",\"POSITIVE\"],\"columnDefinition\":\"VARCHAR(20)\"},\"id\":\"55b96a59-11c3-4e6c-a4de-f681e552eba8\"},{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"value\",\"type\":\"STRING\",\"constraint\":\"NONE\",\"nullable\":true,\"enumValues\":null,\"id\":\"a5283371-f57e-4fda-91b6-36a9f645b177\"},{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"predicate\",\"type\":\"ENTITY_REF\",\"entityTypeId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"constraint\":\"NONE\",\"nullable\":true,\"enumValues\":null,\"id\":\"0e06cb2a-ca87-452c-a8a5-5669b7a7f3e2\"}],\"relations\":[],\"config\":{\"softDelete\":false,\"auditing\":true,\"lombokStyle\":\"BOTH\",\"generateRepository\":true}}",
+        "createdAt": 1778349575707,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "474532fa-3cbd-4c69-903c-2ac925a80a42",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "CUSTOM_TYPE",
+        "label": "FilterGroup",
+        "position": {
+            "x": 3739.7880298552136,
+            "y": 1963.269619027559
+        },
+        "size": {
+            "w": 210,
+            "h": 130
+        },
+        "data": "{\"id\":\"474532fa-3cbd-4c69-903c-2ac925a80a42\",\"type\":\"CUSTOM_TYPE\",\"label\":\"FilterGroup\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"fields\":[{\"id\":\"f217a786-16bc-424e-95b9-1b884f5c0112\",\"name\":\"logicalOp\",\"type\":\"ENUM\",\"entityTypeId\":null,\"customTypeId\":null,\"nullable\":true,\"defaultValue\":\"\",\"enumValues\":{\"values\":[\"AND\",\"OR\"],\"columnDefinition\":\"VARCHAR(20)\"}},{\"id\":\"89f2ce07-9545-4168-beff-14fdcb3fe363\",\"name\":\"conditions\",\"type\":\"ARRAY\",\"arraySubType\":\"CUSTOM_TYPE_REF\",\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":\"62ab8305-3ca5-41ae-aaba-095376fc9349\",\"entityTypeId\":null,\"customTypeId\":null,\"nullable\":true,\"defaultValue\":\"\",\"enumValues\":null},{\"id\":\"64ed7800-12ad-4c9e-842d-0e5aa678280d\",\"name\":\"filters\",\"type\":\"ARRAY\",\"arraySubType\":\"CUSTOM_TYPE_REF\",\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":\"474532fa-3cbd-4c69-903c-2ac925a80a42\",\"entityTypeId\":null,\"customTypeId\":null,\"nullable\":true,\"defaultValue\":\"\",\"enumValues\":null}],\"position\":{\"x\":3739.7880298552136,\"y\":1963.269619027559},\"size\":{\"w\":210,\"h\":130},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false}}",
+        "createdAt": 1778409768959,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "4cf231cd-831b-4a70-a406-1bbb84f6ea60",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "DELETE Field by Id",
+        "position": {
+            "x": 2446.3439108278544,
+            "y": 2109.994011957401
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"4cf231cd-831b-4a70-a406-1bbb84f6ea60\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"DELETE Field by Id\",\"method\":\"DELETE\",\"path\":\"/{id}\",\"position\":{\"x\":2446.3439108278544,\"y\":2109.994011957401},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":true,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[{\"name\":\"id\",\"type\":\"UUID\"}],\"queryParams\":[],\"bodyDTOId\":null},\"response\":{\"successCode\":204,\"returnDTOId\":null,\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778640717186,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "51fa72c7-86b4-4c15-996a-eda6a92fe212",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "DTO",
+        "label": "Object Request DTO",
+        "position": {
+            "x": 1693.2719133614219,
+            "y": 2993.5379275466157
+        },
+        "size": {
+            "w": 210,
+            "h": 140
+        },
+        "data": "{\"id\":\"51fa72c7-86b4-4c15-996a-eda6a92fe212\",\"type\":\"DTO\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Object Request DTO\",\"purpose\":\"REQUEST\",\"origin\":\"DERIVED\",\"entitySources\":[{\"entityId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"includeFields\":[],\"excludeFields\":[\"fields\"]}],\"fields\":[{\"id\":\"1a6e820a-3d99-4bfa-b3a2-fbbae5c4ba44\",\"name\":\"name\",\"type\":\"STRING\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"enumValues\":null,\"validations\":[{\"type\":\"NOT_NULL\",\"value\":\"\",\"message\":\"\"}],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"a97ceed7-0ce7-447b-bac4-0d0b8ffafeea\",\"name\":\"tableName\",\"type\":\"STRING\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"enumValues\":null,\"validations\":[{\"type\":\"NOT_NULL\",\"value\":\"\",\"message\":\"\"}],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"8f74cf0d-17ea-40fb-9c2d-1ffd6c9cf1fd\",\"name\":\"status\",\"type\":\"ENUM\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"enumValues\":[\"DRAFT\",\"ACTIVE\",\"DEPRECATED\"],\"validations\":[{\"type\":\"NOT_NULL\",\"value\":\"\",\"message\":\"\"}],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"bc368288-ecf3-46bd-85e4-9f79e335de5a\",\"name\":\"fieldIds\",\"type\":\"ARRAY\",\"arraySubType\":\"UUID\",\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":null,\"enumValues\":null,\"validations\":[{\"type\":\"NOT_NULL\",\"value\":\"\",\"message\":\"\"}],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}}],\"position\":{\"x\":1693.2719133614219,\"y\":2993.5379275466157},\"size\":{\"w\":210,\"h\":140},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"config\":{\"lombokStyle\":\"BOTH\",\"validationEnabled\":false}}",
+        "createdAt": 1778687429284,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "527a6a21-d80c-418b-b6bb-20103c777398",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "CONTROLLER",
+        "label": "Accessor Controller",
+        "position": {
+            "x": 1836.5,
+            "y": 3428.770135290557
+        },
+        "size": {
+            "w": 220,
+            "h": 100
+        },
+        "data": "{\"id\":\"527a6a21-d80c-418b-b6bb-20103c777398\",\"type\":\"CONTROLLER\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Accessor Controller\",\"basePath\":\"/api/v1/accessor\",\"position\":{\"x\":1836.5,\"y\":3428.770135290557},\"size\":{\"w\":220,\"h\":100},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"swaggerTags\":[],\"authRuleId\":null,\"errorHandlerConfig\":{\"errors\":[{\"description\":\"Missing objectId or data\",\"httpStatus\":400,\"message\":\"VALIDATION_ERROR\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"Missing objectId or data\"}],\"id\":\"6699f819-46d5-4bcb-90c3-1b9ad4b69904\"},{\"description\":\"No object found for the given objectId\",\"httpStatus\":404,\"message\":\"OBJECT_NOT_FOUND\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"No object found for the given objectId\"}],\"id\":\"d74cc09a-4141-4122-86d5-fbb9c2c85512\"},{\"description\":\"Object status is not ACTIVE\",\"httpStatus\":409,\"message\":\"OBJECT_NOT_ACTIVE\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"Object status is not ACTIVE\"}],\"id\":\"361f31bf-8249-4dbd-862b-d8605975bc9e\"},{\"description\":\"A key in data does not correspond to any field in the Object\",\"httpStatus\":400,\"message\":\"UNKNOWN_FIELD\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"A key in data does not correspond to any field in the Object\"}],\"id\":\"1b3b38b6-a763-4850-972c-c8ed739d4b3a\"},{\"description\":\"A required field (validated with REQUIRED predicate) is absent\",\"httpStatus\":400,\"message\":\"REQUIRED_FIELD_MISSING\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"A required field (validated with REQUIRED predicate) is absent\"}],\"id\":\"fff8af83-8c00-48aa-9157-2305e65d7ac0\"},{\"description\":\"A value cannot be cast to its field's expected type\",\"httpStatus\":400,\"message\":\"TYPE_CAST_ERROR\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"A value cannot be cast to its field's expected type\"}],\"id\":\"aa375f42-9a1d-463d-b1d5-2769db38332c\"},{\"description\":\"A value failed one or more predicate checks. Returns per-field breakdown such as { fieldId: 'fieldId-email', validation: 'string_max_255', predicate: 'MAX_LENGTH', message: 'Exceeds max length of 255' }\",\"httpStatus\":422,\"message\":\"FIELD_VALIDATION_FAILED\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"A value failed one or more predicate checks\"},{\"key\":\"breakdown\",\"value\":\"{ fieldId, validation, predicate, message } per failed field\"}],\"id\":\"552f705d-4f62-421c-b9ed-80088caf6927\"},{\"description\":\"Dynamic INSERT query failed at the database level\",\"httpStatus\":500,\"message\":\"DB_INSERT_FAILED\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"Dynamic INSERT query failed at the database level\"}],\"id\":\"1617eb52-b0f0-4483-8aa0-7b5f476f09bd\"}],\"includeTimestamp\":true,\"includeRequestPath\":true},\"config\":{\"crossOrigin\":false,\"apiVersion\":null,\"requestLogging\":false}}",
+        "createdAt": 1779031065162,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "5588c9da-1d3e-4f53-8331-80851a17d013",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "DELETE predicate by ID",
+        "position": {
+            "x": 2489.98361779481,
+            "y": 262.6396800517566
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"5588c9da-1d3e-4f53-8331-80851a17d013\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"DELETE predicate by ID\",\"method\":\"DELETE\",\"path\":\"/{id}\",\"position\":{\"x\":2489.98361779481,\"y\":262.6396800517566},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":false,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[{\"name\":\"id\",\"type\":\"UUID\"}],\"queryParams\":[],\"bodyDTOId\":null},\"response\":{\"successCode\":204,\"returnDTOId\":null,\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778417783888,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "5768915c-4653-45f1-a3be-7840c58fae3a",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "Update Object by Id",
+        "position": {
+            "x": 2456.97027863158,
+            "y": 2644.9383976651898
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"5768915c-4653-45f1-a3be-7840c58fae3a\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Update Object by Id\",\"method\":\"PATCH\",\"path\":\"/{id}\",\"position\":{\"x\":2456.97027863158,\"y\":2644.9383976651898},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":true,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[{\"name\":\"id\",\"type\":\"UUID\"}],\"queryParams\":[],\"bodyDTOId\":\"51fa72c7-86b4-4c15-996a-eda6a92fe212\"},\"response\":{\"successCode\":200,\"returnDTOId\":\"823e5284-e249-4191-92bf-3c8388a576dd\",\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778688346546,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "5a796e48-d436-4d6c-a71b-565abd42f80e",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "LIst all the predicate",
+        "position": {
+            "x": 2243.199742165918,
+            "y": 524.8846586632066
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"5a796e48-d436-4d6c-a71b-565abd42f80e\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"LIst all the predicate\",\"method\":\"POST\",\"path\":\"/listAll\",\"position\":{\"x\":2243.199742165918,\"y\":524.8846586632066},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":true,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[],\"queryParams\":[],\"bodyDTOId\":\"ff0d28e5-0280-4b5c-8235-2a2042440312\"},\"response\":{\"successCode\":200,\"returnDTOId\":\"6ce2d83d-c49c-4119-9950-37bb6a50f1b8\",\"isList\":false,\"isPage\":true},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778412373761,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "5be3d8af-3e75-4afd-9134-f168545d1dfd",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "CUSTOM_TYPE",
+        "label": "Meta",
+        "position": {
+            "x": 893.5383741994116,
+            "y": 1865.1005421299578
+        },
+        "size": {
+            "w": 210,
+            "h": 130
+        },
+        "data": "{\"id\":\"5be3d8af-3e75-4afd-9134-f168545d1dfd\",\"type\":\"CUSTOM_TYPE\",\"label\":\"Meta\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"fields\":[{\"name\":\"displayType\",\"type\":\"ENUM\",\"nullable\":false,\"constraint\":\"NONE\",\"enumValues\":{\"values\":[\"PILL\",\"CARD\"],\"columnDefinition\":\"VARCHAR(20)\"},\"id\":\"02cf8756-6661-4ea5-b573-81b46476f540\"},{\"name\":\"displayFields\",\"type\":\"ARRAY\",\"arraySubType\":\"UUID\",\"nullable\":true,\"constraint\":\"NONE\",\"enumValues\":null,\"id\":\"23c85727-77ad-4d2d-8618-29f1e3ee2af2\"}],\"position\":{\"x\":893.5383741994116,\"y\":1865.1005421299578},\"size\":{\"w\":210,\"h\":130},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false}}",
+        "createdAt": 1778464910447,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "62ab8305-3ca5-41ae-aaba-095376fc9349",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "CUSTOM_TYPE",
+        "label": "FilterCondition",
+        "position": {
+            "x": 3972.6218702860992,
+            "y": 1806.5153892159572
+        },
+        "size": {
+            "w": 210,
+            "h": 130
+        },
+        "data": "{\"id\":\"62ab8305-3ca5-41ae-aaba-095376fc9349\",\"type\":\"CUSTOM_TYPE\",\"label\":\"FilterCondition\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"fields\":[{\"name\":\"field\",\"type\":\"UUID\",\"nullable\":true,\"enumValues\":null,\"id\":\"4f481130-4a1f-4538-83dd-bf3bd7446668\"},{\"name\":\"operator\",\"type\":\"ENUM\",\"nullable\":true,\"enumValues\":{\"values\":[\"EQ\",\"NEQ\",\"GT\",\"GTE\",\"LT\",\"LTE\",\"IN\",\"NOT_IN\",\"LIKE\",\"IS_NULL\",\"IS_NOT_NULL\"],\"columnDefinition\":\"VARCHAR(20)\"},\"id\":\"c18afdba-8d36-40c9-8528-1bfe387a556e\"},{\"id\":\"d5e13a39-0ec7-4ef6-8723-502c2015363c\",\"name\":\"value\",\"type\":\"STRING\",\"entityTypeId\":null,\"customTypeId\":null,\"nullable\":true,\"defaultValue\":\"\",\"enumValues\":null}],\"position\":{\"x\":3972.6218702860992,\"y\":1806.5153892159572},\"size\":{\"w\":210,\"h\":130},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false}}",
+        "createdAt": 1778409576637,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "64327ca7-9d7e-4e96-9161-200713aa8832",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "GET validation by id",
+        "position": {
+            "x": 2217.9834841884685,
+            "y": 1216.682035072865
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"64327ca7-9d7e-4e96-9161-200713aa8832\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"GET validation by id\",\"method\":\"GET\",\"path\":\"/{id}\",\"position\":{\"x\":2217.9834841884685,\"y\":1216.682035072865},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":false,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[{\"name\":\"id\",\"type\":\"UUID\"}],\"queryParams\":[],\"bodyDTOId\":null},\"response\":{\"successCode\":200,\"returnDTOId\":\"3bb56b69-cbe8-4347-a994-5a0619bf87ba\",\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778427051829,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "65c57625-2f5a-4008-aff0-f5311ca43007",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "SERVICE",
+        "label": "Field Service",
+        "position": {
+            "x": 1535.8788577358637,
+            "y": 2044.8649401026319
+        },
+        "size": {
+            "w": 218,
+            "h": 218
+        },
+        "data": "{\"id\":\"65c57625-2f5a-4008-aff0-f5311ca43007\",\"type\":\"SERVICE\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Field Service\",\"methods\":[{\"id\":\"83656e87-45f8-4c34-ae88-a78ead20d19c\",\"name\":\"listAll\",\"returnType\":{\"type\":\"ENTITY_REF\",\"entityTypeId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":true,\"isOptional\":false,\"isVoid\":false,\"customTypeId\":null,\"arrayCustomTypeId\":null},\"params\":[{\"name\":\"searchBy\",\"type\":\"ARRAY\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":\"UUID\",\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null},{\"name\":\"searchKey\",\"type\":\"STRING\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null},{\"name\":\"sorting\",\"type\":\"ARRAY\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":\"CUSTOM_TYPE_REF\",\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":\"fffaafe2-d788-40dd-a5d5-eb8801d7b747\",\"isPageable\":false,\"enumValues\":null},{\"name\":\"pagination\",\"type\":\"CUSTOM_TYPE_REF\",\"entityTypeId\":null,\"customTypeId\":\"a1712799-76db-42f1-b65a-579cca8e3cbc\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null},{\"name\":\"filter\",\"type\":\"CUSTOM_TYPE_REF\",\"entityTypeId\":null,\"customTypeId\":\"474532fa-3cbd-4c69-903c-2ac925a80a42\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":false,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]},{\"id\":\"ac5966b6-2b7d-480c-b420-f0fa8d10e651\",\"name\":\"findById\",\"returnType\":{\"type\":\"ENTITY_REF\",\"entityTypeId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":false,\"isOptional\":true,\"isVoid\":false,\"customTypeId\":null,\"arrayCustomTypeId\":null},\"params\":[{\"name\":\"id\",\"type\":\"UUID\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":false,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]},{\"id\":\"5125d6dc-a10e-4ea5-870e-290986f7daa3\",\"name\":\"create\",\"returnType\":{\"type\":\"ENTITY_REF\",\"entityTypeId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":false,\"isOptional\":false,\"isVoid\":false,\"customTypeId\":null,\"arrayCustomTypeId\":null},\"params\":[{\"name\":\"field\",\"type\":\"STRING\",\"entityTypeId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":true,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]},{\"id\":\"d3dfafe7-08bd-493d-8e6f-cef23638dcc1\",\"name\":\"update\",\"returnType\":{\"type\":\"ENTITY_REF\",\"entityTypeId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":false,\"isOptional\":false,\"isVoid\":false,\"customTypeId\":null,\"arrayCustomTypeId\":null},\"params\":[{\"name\":\"id\",\"type\":\"UUID\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null},{\"name\":\"field\",\"type\":\"STRING\",\"entityTypeId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":true,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]},{\"id\":\"2406ddc9-7ab6-4bee-a534-f54e7b92ef11\",\"name\":\"delete\",\"returnType\":{\"type\":null,\"entityTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":false,\"isOptional\":false,\"isVoid\":true},\"params\":[{\"name\":\"id\",\"type\":\"UUID\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":true,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]}],\"dependencyIds\":[],\"position\":{\"x\":1535.8788577358637,\"y\":2044.8649401026319},\"size\":{\"w\":218,\"h\":218},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"config\":{\"classLevelTransactional\":true,\"classLevelAsync\":false,\"generateInterface\":true}}",
+        "createdAt": 1778464256282,
+        "updatedAt": 1782317126144
+    },
+    {
+        "id": "6a5ef367-a1d4-4b9e-aea2-2646af43f78d",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "DELETE Object By Id",
+        "position": {
+            "x": 2456.452424575992,
+            "y": 2852.984249284966
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"6a5ef367-a1d4-4b9e-aea2-2646af43f78d\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"DELETE Object By Id\",\"method\":\"DELETE\",\"path\":\"/{id}\",\"position\":{\"x\":2456.452424575992,\"y\":2852.984249284966},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":true,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[{\"name\":\"id\",\"type\":\"UUID\"}],\"queryParams\":[],\"bodyDTOId\":null},\"response\":{\"successCode\":200,\"returnDTOId\":null,\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778688431645,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "6afe684b-c07c-4dfc-9220-96d87ac4ad80",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "POST /",
+        "position": {
+            "x": 2188.8305162508263,
+            "y": 2572.3020981660993
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"6afe684b-c07c-4dfc-9220-96d87ac4ad80\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"POST /\",\"method\":\"POST\",\"path\":\"/\",\"position\":{\"x\":2188.8305162508263,\"y\":2572.3020981660993},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":true,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[],\"queryParams\":[],\"bodyDTOId\":\"51fa72c7-86b4-4c15-996a-eda6a92fe212\"},\"response\":{\"successCode\":200,\"returnDTOId\":\"823e5284-e249-4191-92bf-3c8388a576dd\",\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778687445700,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "6b65e09c-4845-47a2-9f20-4353e7e5996f",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "TABLE",
+        "label": "Database Table",
+        "position": {
+            "x": 589.8585993875984,
+            "y": 2076.809749457798
+        },
+        "size": {
+            "w": 220,
+            "h": 160
+        },
+        "data": "{\"id\":\"6b65e09c-4845-47a2-9f20-4353e7e5996f\",\"type\":\"TABLE\",\"label\":\"Database Table\",\"tableName\":\"field\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"entityId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"dbNodeId\":\"7a145069-233d-4ea7-beea-f3784df3f2b3\",\"position\":{\"x\":589.8585993875984,\"y\":2076.809749457798},\"size\":{\"w\":220,\"h\":160},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"customQueries\":[{\"id\":\"f4414f81-48c6-4255-b889-f4fb1bd13165\",\"methodName\":\"listAll\",\"description\":\"Dynamically builds and executes a paginated, filterable, sortable query over the object table based on a recursive FilterGroup, optional global search key, and explicit search field IDs.\",\"targetEntityId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"type\":\"AI\",\"queryString\":null,\"aiPrompt\":{\"description\":\"Generate a dynamic JPA Criteria (or Specification) query that returns a Page<Object> filtered by a recursive FilterGroup tree, narrowed by an optional global searchKey across the field IDs listed in searchBy, sorted by the SortCriteria list, and paginated using the Pagination input.\",\"businessRules\":\"INPUTS\\n- filter: FilterGroup { logicalOp: AND|OR, conditions: FilterCondition[], filters: FilterGroup[] } — recursive. May be null/empty (no filtering).\\n- FilterCondition { field: UUID (Field id, resolves to a column on Object), operator: EQ|NEQ|GT|GTE|LT|LTE|IN|NOT_IN|LIKE|IS_NULL|IS_NOT_NULL, value: any }.\\n- searchBy: UUID[] of Field ids. When searchKey is non-blank, build an OR of LIKE '%searchKey%' over only these fields. If searchBy is empty/null, ignore searchKey.\\n- searchKey: free-text. Trim; treat blank as absent.\\n- sorting: SortCriteria[] { field: UUID, direction: ASC|DESC }. Apply in order. Ignore unknown field ids.\\n- pagination: Pagination { page (0-based), page_size }. Required. Defaults: page=0, page_size=20. Cap page_size at 100.\\n\\nOBJECT ENTITY COLUMNS\\n- name (STRING, UNIQUE, NOT NULL)\\n- table_name (STRING, UNIQUE, NOT NULL)\\n- status (ENUM, NOT NULL) — e.g. DRAFT | ACTIVE | DEPRECATED\\n- fields (ARRAY of Field refs, NULLABLE)\\n- id (UUID, PK)\\n- created_at, updated_at (auditing enabled)\\n\\nTRANSLATION RULES\\n- Resolve every field UUID to its Object column via the Field registry (name → column). If a UUID does not resolve, skip that condition (do not throw).\\n- Combine all entries inside a single FilterGroup (its conditions AND its nested filters) using the group's logicalOp.\\n- Recurse into nested filters. Each nested group is wrapped in its own parentheses before being combined with the parent group's logicalOp.\\n- Operator mapping: EQ →= , NEQ →<>, GT →>, GTE →>=, LT →<, LTE →<=, IN →IN (...), NOT_IN →NOT IN (...), LIKE →LIKE '%value%' (escape % and _), IS_NULL →IS NULL (no value), IS_NOT_NULL →IS NOT NULL (no value).\\n- IN / NOT_IN expect an array value; reject single scalar by skipping that condition.\\n- LIKE only valid for STRING/TEXT columns (name, table_name); for non-string columns, skip.\\n- The global searchKey filter is composed as (col1 LIKE :k OR col2 LIKE :k OR ...) over searchBy and AND-ed with the FilterGroup root.\\n- Always use bound parameters — never inline literals. Sanitize % and _ in LIKE values.\\n- Apply sorting AFTER filtering. If sorting is empty, default to ORDER BY created_at DESC (auditing is enabled on Object).\",\"edgeCases\":\"- Null filter / empty conditions and filters → no WHERE clause from filter tree.\\n- An empty FilterGroup nested in a parent → emit nothing for that node, do not produce '() AND ...'.\\n- searchBy non-empty but searchKey blank → ignore search entirely.\\n- searchKey non-blank but searchBy empty → ignore search entirely (do not full-table LIKE).\\n- IS_NULL / IS_NOT_NULL must ignore the value field even if present.\\n- IN / NOT_IN with empty array → skip the condition (do not generate 'IN ()' which is invalid SQL).\\n- Unknown operator or unresolvable field UUID → skip that condition silently and log at DEBUG.\\n- Mixing AND and OR is handled purely via grouping — never flatten nested groups.\\n- page < 0 → clamp to 0. page_size <= 0 → use default 20.\\n- LIKE values: escape '%', '_', '\\\\\\\\' before binding; use ESCAPE '\\\\\\\\' in the predicate.\\n- Type coercion: convert FilterCondition.value to the column's Java type (enum for status, String for name/table_name) before binding; if coercion fails, skip the condition.\\n- Always count with the same predicate tree applied — never return a stale total.\",\"expectedBehaviour\":\"Given the example input { logicalOp: AND, conditions: [ {status,EQ,'ACTIVE'}, {name,LIKE,'order'} ], filters: [ { logicalOp: OR, conditions: [ {table_name,EQ,'orders'}, {status,IN,['DRAFT','ACTIVE']} ], filters: [] } ] } the generated WHERE clause must be exactly: (status = :p1 AND name LIKE :p2 ESCAPE '\\\\\\\\') AND (table_name = :p3 OR status IN (:p4)). Result is a Page<Object> respecting pagination, sorting, and an accurate total count. No SQL injection is possible — all values are bound parameters.\",\"aiGenerate\":true},\"params\":[{\"name\":\"searchBy\",\"type\":\"ARRAY\",\"arraySubType\":\"UUID\",\"isCollection\":true},{\"name\":\"searchKey\",\"type\":\"STRING\",\"isCollection\":false},{\"name\":\"sorting\",\"type\":\"ARRAY\",\"arraySubType\":\"CUSTOM_TYPE_REF\",\"arrayCustomTypeId\":\"fffaafe2-d788-40dd-a5d5-eb8801d7b747\",\"isCollection\":true},{\"name\":\"pagination\",\"type\":\"CUSTOM_TYPE_REF\",\"customTypeId\":\"a1712799-76db-42f1-b65a-579cca8e3cbc\",\"isCollection\":false},{\"name\":\"filter\",\"type\":\"CUSTOM_TYPE_REF\",\"customTypeId\":\"474532fa-3cbd-4c69-903c-2ac925a80a42\",\"isCollection\":false}],\"returnType\":{\"entityId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"isList\":false,\"isPage\":true,\"isOptional\":false,\"projectionClass\":\"\"},\"nativeQuery\":false,\"modifying\":false,\"cache\":null}]}",
+        "createdAt": 1778435926753,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "6ce2d83d-c49c-4119-9950-37bb6a50f1b8",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "DTO",
+        "label": "Predicate DTO",
+        "position": {
+            "x": 1740.0007113224492,
+            "y": 678.2823263394899
+        },
+        "size": {
+            "w": 210,
+            "h": 140
+        },
+        "data": "{\"id\":\"6ce2d83d-c49c-4119-9950-37bb6a50f1b8\",\"type\":\"DTO\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Predicate DTO\",\"purpose\":\"RESPONSE\",\"origin\":\"CUSTOM\",\"entitySources\":[{\"entityId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"includeFields\":[],\"excludeFields\":[]}],\"fields\":[{\"id\":\"1c58f474-4923-4670-8f89-62b0f7eca275\",\"name\":\"name\",\"type\":\"STRING\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"601690c2-debd-4934-8453-a8bac1f8e34c\",\"name\":\"operation\",\"type\":\"ENUM\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"7e05accd-abf2-40fb-b3d7-cd4783d055e7\",\"name\":\"type\",\"type\":\"ENUM\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"310a7ed7-08e5-4fdc-b9f8-9e498cf27ecd\",\"name\":\"Id\",\"type\":\"UUID\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"e23ce6e6-76b5-436a-8a7b-b127eae5c0b7\",\"name\":\"createdAT\",\"type\":\"LOCALDATE\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"3cbc2687-2ec0-4349-818c-ab17ca490420\",\"name\":\"updatedAt\",\"type\":\"LOCALDATE\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}}],\"position\":{\"x\":1740.0007113224492,\"y\":678.2823263394899},\"size\":{\"w\":210,\"h\":140},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"config\":{\"lombokStyle\":\"BOTH\",\"validationEnabled\":false}}",
+        "createdAt": 1778391125176,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "6f433d58-5ef5-460a-bb2c-6ad7ec247426",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "PATCH /{id}",
+        "position": {
+            "x": 2489.3547889578863,
+            "y": 432.221195641299
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"6f433d58-5ef5-460a-bb2c-6ad7ec247426\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"PATCH /{id}\",\"method\":\"PATCH\",\"path\":\"/{id}\",\"position\":{\"x\":2489.3547889578863,\"y\":432.221195641299},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":true,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[{\"name\":\"id\",\"type\":\"UUID\"}],\"queryParams\":[],\"bodyDTOId\":\"a0d0ffd3-c452-438c-b344-e29b10f9b08d\"},\"response\":{\"successCode\":200,\"returnDTOId\":\"823e5284-e249-4191-92bf-3c8388a576dd\",\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778417856280,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "72d93e33-856a-4197-a301-f0e3d5e00e3c",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "GET /",
+        "position": {
+            "x": 2254.62910874695,
+            "y": 3247.7537419114597
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"72d93e33-856a-4197-a301-f0e3d5e00e3c\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"GET /\",\"method\":\"GET\",\"path\":\"/\",\"position\":{\"x\":2254.62910874695,\"y\":3247.7537419114597},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":true,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[],\"queryParams\":[],\"bodyDTOId\":\"0f574419-f726-44fa-b7a0-864b5545d46c\"},\"response\":{\"successCode\":200,\"returnDTOId\":\"823e5284-e249-4191-92bf-3c8388a576dd\",\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1779032416963,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "75394c2a-97de-4925-a2c4-5d3ce37b0d41",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "ListAll Fields ",
+        "position": {
+            "x": 2196.0207583530246,
+            "y": 2166.7913794972455
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"75394c2a-97de-4925-a2c4-5d3ce37b0d41\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"ListAll Fields \",\"method\":\"POST\",\"path\":\"/listAll\",\"position\":{\"x\":2196.0207583530246,\"y\":2166.7913794972455},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":true,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[],\"queryParams\":[],\"bodyDTOId\":\"ff0d28e5-0280-4b5c-8235-2a2042440312\"},\"response\":{\"successCode\":200,\"returnDTOId\":\"c7dcb7ed-a493-480f-a407-b3361f6e6305\",\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778552688533,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "7a145069-233d-4ea7-beea-f3784df3f2b3",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "DB",
+        "label": "Database",
+        "position": {
+            "x": 162.29032916135668,
+            "y": 1654.3264021335137
+        },
+        "size": {
+            "w": 220,
+            "h": 160
+        },
+        "data": "{\"id\":\"7a145069-233d-4ea7-beea-f3784df3f2b3\",\"type\":\"DB\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Database\",\"dbName\":\"dynamic_db\",\"dbType\":\"POSTGRESQL\",\"host\":\"localhost\",\"port\":5432,\"schema\":\"public\",\"username\":\"buii\",\"password\":\"postgres\",\"position\":{\"x\":162.29032916135668,\"y\":1654.3264021335137},\"size\":{\"w\":220,\"h\":160},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"config\":{\"ddlAuto\":\"validate\",\"showSql\":false,\"poolSize\":10,\"flyway\":false,\"redis\":false}}",
+        "createdAt": 1778776272114,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "823e5284-e249-4191-92bf-3c8388a576dd",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "DTO",
+        "label": "Create update DTO",
+        "position": {
+            "x": 3298.5628392656945,
+            "y": 1647.7824962597163
+        },
+        "size": {
+            "w": 210,
+            "h": 140
+        },
+        "data": "{\"id\":\"823e5284-e249-4191-92bf-3c8388a576dd\",\"type\":\"DTO\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Create update DTO\",\"purpose\":\"RESPONSE\",\"origin\":\"CUSTOM\",\"entitySources\":[],\"fields\":[{\"id\":\"8404a2f6-b7a8-4443-9c71-1ae8965cc3f2\",\"name\":\"id\",\"type\":\"UUID\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"ab6ec645-9171-41d1-a740-5067fc9b4290\",\"name\":\"message\",\"type\":\"STRING\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}}],\"position\":{\"x\":3298.5628392656945,\"y\":1647.7824962597163},\"size\":{\"w\":210,\"h\":140},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"config\":{\"lombokStyle\":\"BOTH\",\"validationEnabled\":false}}",
+        "createdAt": 1778390372287,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "836a75bd-c68d-478d-8212-fc7d52d1172c",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "CONTROLLER",
+        "label": "Validation Controller",
+        "position": {
+            "x": 1870.6984183376871,
+            "y": 1305.7999798547664
+        },
+        "size": {
+            "w": 220,
+            "h": 100
+        },
+        "data": "{\"id\":\"836a75bd-c68d-478d-8212-fc7d52d1172c\",\"type\":\"CONTROLLER\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Validation Controller\",\"basePath\":\"/api/v1/validation\",\"position\":{\"x\":1870.6984183376871,\"y\":1305.7999798547664},\"size\":{\"w\":220,\"h\":100},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"swaggerTags\":[],\"authRuleId\":null,\"errorHandlerConfig\":{\"errors\":[{\"description\":\"Missing required fields: name, type, predicateId\",\"httpStatus\":400,\"message\":\"VALIDATION_ERROR\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"Missing required fields: name, type, predicateId\"}],\"id\":\"364bf772-5cbf-40b8-9d8f-e69180e386d9\"},{\"description\":\"type is not a valid field type\",\"httpStatus\":400,\"message\":\"INVALID_ENUM\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"type is not a valid field type\"}],\"id\":\"4043c998-03ea-42c4-968b-7eb93092cb91\"},{\"description\":\"predicateId does not reference an existing predicate\",\"httpStatus\":404,\"message\":\"PREDICATE_NOT_FOUND\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"predicateId does not reference an existing predicate\"}],\"id\":\"b177d590-5431-4dbd-bfa8-24b31d9654d5\"},{\"description\":\"The predicate's operation is not applicable to the specified field type (e.g. MAX_LENGTH on INTEGER)\",\"httpStatus\":400,\"message\":\"INCOMPATIBLE_TYPE_OPERATION\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"The predicate's operation is not applicable to the specified field type (e.g. MAX_LENGTH on INTEGER)\"}],\"id\":\"30e57c9a-d45a-4058-83e6-db5d41222b10\"},{\"description\":\"value cannot be cast to the expected type for the given operation (e.g. non-numeric value for MAX)\",\"httpStatus\":400,\"message\":\"INVALID_VALUE_FORMAT\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"value cannot be cast to the expected type for the given operation (e.g. non-numeric value for MAX)\"}],\"id\":\"dd1e1f4e-3372-4ea1-86fa-7c1844ccab07\"},{\"description\":\"A validation with this name already exists\",\"httpStatus\":409,\"message\":\"DUPLICATE_NAME\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"A validation with this name already exists\"}],\"id\":\"a18350ab-835d-4fd3-b4a8-128c29e62de4\"},{\"description\":\"No validation found for the given id\",\"httpStatus\":404,\"message\":\"VALIDATION_NOT_FOUND\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"No validation found for the given id\"}],\"id\":\"431f57e7-72a3-4ae4-8460-d699b01b1572\"},{\"description\":\"Validation is attached to one or more Fields — type and predicateId cannot be changed\",\"httpStatus\":409,\"message\":\"VALIDATION_IN_USE\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"Validation is attached to one or more Fields — type and predicateId cannot be changed\"}],\"id\":\"c1adadc6-dd1e-467d-b03f-da6b0d5b52c5\"}],\"includeTimestamp\":true,\"includeRequestPath\":true},\"config\":{\"crossOrigin\":false,\"apiVersion\":null,\"requestLogging\":true}}",
+        "createdAt": 1778422664480,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "8469d609-f305-45d1-857e-07b485029fbd",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "UPDATE Fields by id",
+        "position": {
+            "x": 2449.561551122495,
+            "y": 1904.5377433568283
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"8469d609-f305-45d1-857e-07b485029fbd\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"UPDATE Fields by id\",\"method\":\"PATCH\",\"path\":\"/{id}\",\"position\":{\"x\":2449.561551122495,\"y\":1904.5377433568283},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":false,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[{\"name\":\"id\",\"type\":\"UUID\"}],\"queryParams\":[],\"bodyDTOId\":\"1bda28f0-76f7-40ef-b14e-3102ea69e782\"},\"response\":{\"successCode\":200,\"returnDTOId\":\"823e5284-e249-4191-92bf-3c8388a576dd\",\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778555179275,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "8dba3255-3e9f-4fae-9dce-a3d268da8a11",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "List all the Validation",
+        "position": {
+            "x": 2218.9265658443255,
+            "y": 1399.8938373837595
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"8dba3255-3e9f-4fae-9dce-a3d268da8a11\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"List all the Validation\",\"method\":\"POST\",\"path\":\"/listAll\",\"position\":{\"x\":2218.9265658443255,\"y\":1399.8938373837595},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":true,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[],\"queryParams\":[],\"bodyDTOId\":\"ff0d28e5-0280-4b5c-8235-2a2042440312\"},\"response\":{\"successCode\":201,\"returnDTOId\":\"3bb56b69-cbe8-4347-a994-5a0619bf87ba\",\"isList\":false,\"isPage\":true},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778432127367,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "9f665d9f-5e01-4ffc-a3cc-934dc8a56c2c",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "ENTITY",
+        "label": "Accessor",
+        "position": {
+            "x": 1066.4999999999998,
+            "y": 3383
+        },
+        "size": {
+            "w": 240,
+            "h": 180
+        },
+        "data": "{\"id\":\"9f665d9f-5e01-4ffc-a3cc-934dc8a56c2c\",\"type\":\"ENTITY\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Accessor\",\"tableName\":\"accessor\",\"position\":{\"x\":1066.4999999999998,\"y\":3383},\"size\":{\"w\":240,\"h\":180},\"aiPrompt\":{\"description\":\"This is just a dummy entity, and this is just here to connect the service to the table and query part so that everything works in sync...  There will not be any DB table for this..\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":true},\"fields\":[{\"id\":\"a4288314-066f-4683-995b-199f4e2115b8\",\"name\":\"id\",\"type\":\"UUID\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"relation\":null,\"constraint\":\"PK\",\"nullable\":false,\"columnName\":\"id\",\"defaultValue\":\"\",\"enumValues\":null,\"entityTypeWarning\":false}],\"relations\":[],\"config\":{\"softDelete\":false,\"auditing\":true,\"lombokStyle\":\"BOTH\",\"generateRepository\":true}}",
+        "createdAt": 1779031041169,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "a0d0ffd3-c452-438c-b344-e29b10f9b08d",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "DTO",
+        "label": "Predicate DTO",
+        "position": {
+            "x": 1730.383539438555,
+            "y": 182.34463310176898
+        },
+        "size": {
+            "w": 210,
+            "h": 140
+        },
+        "data": "{\"id\":\"a0d0ffd3-c452-438c-b344-e29b10f9b08d\",\"type\":\"DTO\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Predicate DTO\",\"purpose\":\"REQUEST\",\"origin\":\"DERIVED\",\"entitySources\":[{\"entityId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"includeFields\":[],\"excludeFields\":[]}],\"fields\":[{\"id\":\"a11176bf-74d1-4ce4-afd5-77037e86afe2\",\"name\":\"name\",\"type\":\"STRING\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"validations\":[{\"type\":\"NOT_NULL\",\"value\":\"\",\"message\":\"\"}],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"ffd574f9-4152-41cc-a320-ad46ed657b0d\",\"name\":\"operation\",\"type\":\"ENUM\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"validations\":[{\"type\":\"NOT_NULL\",\"value\":\"\",\"message\":\"\"}],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"0129057c-512b-459f-97e3-33169aca3ef0\",\"name\":\"type\",\"type\":\"ENUM\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"validations\":[{\"type\":\"NOT_NULL\",\"value\":\"\",\"message\":\"\"}],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}}],\"position\":{\"x\":1730.383539438555,\"y\":182.34463310176898},\"size\":{\"w\":210,\"h\":140},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"config\":{\"lombokStyle\":\"BOTH\",\"validationEnabled\":true}}",
+        "createdAt": 1778390273204,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "a1712799-76db-42f1-b65a-579cca8e3cbc",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "CUSTOM_TYPE",
+        "label": "Pagination",
+        "position": {
+            "x": 3765.6135496177562,
+            "y": 1653.0685732595139
+        },
+        "size": {
+            "w": 210,
+            "h": 130
+        },
+        "data": "{\"id\":\"a1712799-76db-42f1-b65a-579cca8e3cbc\",\"type\":\"CUSTOM_TYPE\",\"label\":\"Pagination\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"fields\":[{\"id\":\"a03a1658-977b-40b5-8ebf-041a2e16263e\",\"name\":\"page\",\"type\":\"INTEGER\",\"entityTypeId\":null,\"customTypeId\":null,\"nullable\":true,\"defaultValue\":\"\",\"enumValues\":null},{\"id\":\"2e1611c4-f299-4167-a28f-2a46304feb2f\",\"name\":\"page_size\",\"type\":\"INTEGER\",\"entityTypeId\":null,\"customTypeId\":null,\"nullable\":true,\"defaultValue\":\"\",\"enumValues\":null}],\"position\":{\"x\":3765.6135496177562,\"y\":1653.0685732595139},\"size\":{\"w\":210,\"h\":130},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false}}",
+        "createdAt": 1778402554724,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "a77a487c-f9a5-4dbb-b10d-f4175976370b",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "Create Predicate API",
+        "position": {
+            "x": 2240.2390837561748,
+            "y": 179.91234008170613
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"a77a487c-f9a5-4dbb-b10d-f4175976370b\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Create Predicate API\",\"method\":\"POST\",\"path\":\"/\",\"position\":{\"x\":2240.2390837561748,\"y\":179.91234008170613},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":false,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[],\"queryParams\":[],\"bodyDTOId\":\"a0d0ffd3-c452-438c-b344-e29b10f9b08d\"},\"response\":{\"successCode\":201,\"returnDTOId\":\"823e5284-e249-4191-92bf-3c8388a576dd\",\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":false,\"errors\":[{\"description\":\"Missing required fields: name, operation, type\",\"httpStatus\":400,\"message\":\"VALIDATION_ERROR\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"Missing required fields: name, operation, type\"}],\"id\":\"0624a085-8df5-4615-8a0a-80526c362522\"},{\"description\":\"operation or type is not a valid enum value\",\"httpStatus\":400,\"message\":\"INVALID_ENUM\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"operation or type is not a valid enum value\"}],\"id\":\"47c97218-3332-4dcc-805e-17298ee9a882\"},{\"description\":\"type is REGEX but operation is not PATTERN\",\"httpStatus\":400,\"message\":\"INVALID_OPERATION_FOR_TYPE\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"type is REGEX but operation is not PATTERN\"}],\"id\":\"0dfdf948-1ebb-4ebd-933b-10fa5b8eeeaf\"}]}}",
+        "createdAt": 1778389675982,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "a9fae73b-0136-466d-8d8b-fe8c671ba3ef",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "DELETE  validation by Id",
+        "position": {
+            "x": 2473.1535133329444,
+            "y": 1132.0095958689676
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"a9fae73b-0136-466d-8d8b-fe8c671ba3ef\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"DELETE  validation by Id\",\"method\":\"DELETE\",\"path\":\"/{id}\",\"position\":{\"x\":2473.1535133329444,\"y\":1132.0095958689676},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":true,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[{\"name\":\"id\",\"type\":\"UUID\"}],\"queryParams\":[],\"bodyDTOId\":null},\"response\":{\"successCode\":204,\"returnDTOId\":null,\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778432589894,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "ad47c6ef-5342-4ed0-8b4f-ebab3aa05540",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "SERVICE",
+        "label": "Validation Service",
+        "position": {
+            "x": 1519.1902306002685,
+            "y": 1241.0850276564836
+        },
+        "size": {
+            "w": 240,
+            "h": 219
+        },
+        "data": "{\"id\":\"ad47c6ef-5342-4ed0-8b4f-ebab3aa05540\",\"type\":\"SERVICE\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Validation Service\",\"methods\":[{\"id\":\"9ffe8c11-884c-4e09-826d-8bbabef60cf1\",\"name\":\"listAll\",\"returnType\":{\"type\":\"ENTITY_REF\",\"entityTypeId\":\"46196b66-85e9-4be0-9522-4dbeaa780b02\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":true,\"isOptional\":false,\"isVoid\":false,\"customTypeId\":null,\"arrayCustomTypeId\":null},\"params\":[{\"name\":\"searchBy\",\"type\":\"ARRAY\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":\"UUID\",\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null},{\"name\":\"searchKey\",\"type\":\"STRING\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null},{\"name\":\"sorting\",\"type\":\"ARRAY\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":\"CUSTOM_TYPE_REF\",\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":\"fffaafe2-d788-40dd-a5d5-eb8801d7b747\",\"isPageable\":false,\"enumValues\":null},{\"name\":\"pagination\",\"type\":\"CUSTOM_TYPE_REF\",\"entityTypeId\":null,\"customTypeId\":\"a1712799-76db-42f1-b65a-579cca8e3cbc\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null},{\"name\":\"filter\",\"type\":\"CUSTOM_TYPE_REF\",\"entityTypeId\":null,\"customTypeId\":\"474532fa-3cbd-4c69-903c-2ac925a80a42\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":false,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]},{\"id\":\"99db58f1-2040-407d-a6e8-bd25700c91bf\",\"name\":\"findById\",\"returnType\":{\"type\":\"ENTITY_REF\",\"entityTypeId\":\"46196b66-85e9-4be0-9522-4dbeaa780b02\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":false,\"isOptional\":true,\"isVoid\":false,\"customTypeId\":null,\"arrayCustomTypeId\":null},\"params\":[{\"name\":\"id\",\"type\":\"UUID\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":false,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]},{\"id\":\"f81823b5-3444-472e-b0cf-bf45f9043fd7\",\"name\":\"create\",\"returnType\":{\"type\":\"ENTITY_REF\",\"entityTypeId\":\"46196b66-85e9-4be0-9522-4dbeaa780b02\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":false,\"isOptional\":false,\"isVoid\":false,\"customTypeId\":null,\"arrayCustomTypeId\":null},\"params\":[{\"name\":\"validation\",\"type\":\"STRING\",\"entityTypeId\":\"46196b66-85e9-4be0-9522-4dbeaa780b02\",\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":true,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]},{\"id\":\"2d759051-feca-4573-bb0a-207e2ce78fde\",\"name\":\"update\",\"returnType\":{\"type\":\"ENTITY_REF\",\"entityTypeId\":\"46196b66-85e9-4be0-9522-4dbeaa780b02\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":false,\"isOptional\":false,\"isVoid\":false,\"customTypeId\":null,\"arrayCustomTypeId\":null},\"params\":[{\"name\":\"id\",\"type\":\"UUID\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null},{\"name\":\"validation\",\"type\":\"STRING\",\"entityTypeId\":\"46196b66-85e9-4be0-9522-4dbeaa780b02\",\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":true,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]},{\"id\":\"656ced1a-03df-4820-a7dc-821d22945512\",\"name\":\"delete\",\"returnType\":{\"type\":null,\"entityTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":false,\"isOptional\":false,\"isVoid\":true},\"params\":[{\"name\":\"id\",\"type\":\"UUID\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":true,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]}],\"dependencyIds\":[],\"position\":{\"x\":1519.1902306002685,\"y\":1241.0850276564836},\"size\":{\"w\":240,\"h\":219},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"config\":{\"classLevelTransactional\":true,\"classLevelAsync\":false,\"generateInterface\":true}}",
+        "createdAt": 1778416584532,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "be13f657-ff34-4b04-80de-bbc65d687f60",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "SERVICE",
+        "label": "Predicate Service",
+        "position": {
+            "x": 1532.7955007771523,
+            "y": 380.1297647523544
+        },
+        "size": {
+            "w": 236,
+            "h": 220
+        },
+        "data": "{\"id\":\"be13f657-ff34-4b04-80de-bbc65d687f60\",\"type\":\"SERVICE\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Predicate Service\",\"methods\":[{\"id\":\"46616454-70c5-4392-9cb6-08229f86fd8d\",\"name\":\"listAll\",\"returnType\":{\"type\":\"ENTITY_REF\",\"entityTypeId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":true,\"isOptional\":false,\"isVoid\":false,\"customTypeId\":null,\"arrayCustomTypeId\":null},\"params\":[{\"name\":\"searchBy\",\"type\":\"ARRAY\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":\"UUID\",\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null},{\"name\":\"searchKey\",\"type\":\"STRING\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null},{\"name\":\"sorting\",\"type\":\"ARRAY\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":\"CUSTOM_TYPE_REF\",\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":\"fffaafe2-d788-40dd-a5d5-eb8801d7b747\",\"isPageable\":false,\"enumValues\":null},{\"name\":\"pagination\",\"type\":\"CUSTOM_TYPE_REF\",\"entityTypeId\":null,\"customTypeId\":\"a1712799-76db-42f1-b65a-579cca8e3cbc\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null},{\"name\":\"filter\",\"type\":\"CUSTOM_TYPE_REF\",\"entityTypeId\":null,\"customTypeId\":\"474532fa-3cbd-4c69-903c-2ac925a80a42\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":false,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]},{\"id\":\"6287dd62-194a-4edd-9a49-c42851abbe18\",\"name\":\"findById\",\"returnType\":{\"type\":\"ENTITY_REF\",\"entityTypeId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":false,\"isOptional\":true,\"isVoid\":false,\"customTypeId\":null,\"arrayCustomTypeId\":null},\"params\":[{\"name\":\"id\",\"type\":\"UUID\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":false,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]},{\"id\":\"c8a96b6b-d1d9-4a28-8f5d-b13c4a6e187a\",\"name\":\"create\",\"returnType\":{\"type\":\"ENTITY_REF\",\"entityTypeId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":false,\"isOptional\":false,\"isVoid\":false,\"customTypeId\":null,\"arrayCustomTypeId\":null},\"params\":[{\"name\":\"predicate\",\"type\":\"STRING\",\"entityTypeId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":true,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]},{\"id\":\"ce86b361-fe22-404b-bdc5-cb462c4b2219\",\"name\":\"update\",\"returnType\":{\"type\":\"ENTITY_REF\",\"entityTypeId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":false,\"isOptional\":false,\"isVoid\":false,\"customTypeId\":null,\"arrayCustomTypeId\":null},\"params\":[{\"name\":\"id\",\"type\":\"UUID\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null},{\"name\":\"predicate\",\"type\":\"STRING\",\"entityTypeId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":true,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]},{\"id\":\"23ade24d-644e-49b5-8eaf-dd4dc604a6a7\",\"name\":\"delete\",\"returnType\":{\"type\":null,\"entityTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"isList\":false,\"isPage\":false,\"isOptional\":false,\"isVoid\":true},\"params\":[{\"name\":\"id\",\"type\":\"UUID\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"isPageable\":false,\"enumValues\":null}],\"transactional\":true,\"async\":false,\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"throwsErrors\":[]}],\"dependencyIds\":[],\"position\":{\"x\":1532.7955007771523,\"y\":380.1297647523544},\"size\":{\"w\":236,\"h\":220},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"config\":{\"classLevelTransactional\":true,\"classLevelAsync\":false,\"generateInterface\":true}}",
+        "createdAt": 1778389525715,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "c077cfff-54f6-434a-8c52-6708f546adbf",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "CUSTOM_TYPE",
+        "label": "Option",
+        "position": {
+            "x": 1280.5817531506862,
+            "y": 1860.7120451014766
+        },
+        "size": {
+            "w": 210,
+            "h": 130
+        },
+        "data": "{\"id\":\"c077cfff-54f6-434a-8c52-6708f546adbf\",\"type\":\"CUSTOM_TYPE\",\"label\":\"Option\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"fields\":[{\"name\":\"type\",\"type\":\"ENUM\",\"nullable\":false,\"constraint\":\"NONE\",\"enumValues\":{\"values\":[\"STATIC\",\"DYNAMIC\"],\"columnDefinition\":\"VARCHAR(20)\"},\"id\":\"b0c092ff-f23b-44e3-98d2-b5ad8d5ab600\"},{\"name\":\"values\",\"type\":\"ARRAY\",\"arraySubType\":\"STRING\",\"nullable\":true,\"constraint\":\"NONE\",\"enumValues\":null,\"id\":\"611e1e04-cbb7-41d5-b56e-8acac8ec7878\"},{\"name\":\"sourceObjectId\",\"type\":\"UUID\",\"nullable\":true,\"constraint\":\"NONE\",\"enumValues\":null,\"id\":\"521b5374-3c4e-492b-85bf-6d81b26ec76f\"}],\"position\":{\"x\":1280.5817531506862,\"y\":1860.7120451014766},\"size\":{\"w\":210,\"h\":130},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false}}",
+        "createdAt": 1778464910498,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "c5d23e0d-0cf8-4bc9-b5db-9da4bfc128da",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "Update validation API",
+        "position": {
+            "x": 2471.211412248982,
+            "y": 1325.4338608626847
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"c5d23e0d-0cf8-4bc9-b5db-9da4bfc128da\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Update validation API\",\"method\":\"PATCH\",\"path\":\"/{id}\",\"position\":{\"x\":2471.211412248982,\"y\":1325.4338608626847},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":false,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[{\"name\":\"id\",\"type\":\"UUID\"}],\"queryParams\":[],\"bodyDTOId\":\"f5513810-cc57-46d3-9389-eb9aa67c4635\"},\"response\":{\"successCode\":200,\"returnDTOId\":\"823e5284-e249-4191-92bf-3c8388a576dd\",\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778432514047,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "c76f288c-904a-4123-b0eb-123ed1565242",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "Get Predicate By Id API",
+        "position": {
+            "x": 2241.408561894918,
+            "y": 340.65638097933606
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"c76f288c-904a-4123-b0eb-123ed1565242\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Get Predicate By Id API\",\"method\":\"GET\",\"path\":\"/{id}\",\"position\":{\"x\":2241.408561894918,\"y\":340.65638097933606},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":false,\"deprecated\":false,\"description\":\"Get Predicate by ID\"},\"request\":{\"pathVars\":[{\"name\":\"id\",\"type\":\"UUID\"}],\"queryParams\":[],\"bodyDTOId\":null},\"response\":{\"successCode\":200,\"returnDTOId\":\"6ce2d83d-c49c-4119-9950-37bb6a50f1b8\",\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778390919758,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "c7dcb7ed-a493-480f-a407-b3361f6e6305",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "DTO",
+        "label": "Field response DTO",
+        "position": {
+            "x": 1741.0739640749164,
+            "y": 1828.8964628736726
+        },
+        "size": {
+            "w": 210,
+            "h": 140
+        },
+        "data": "{\"id\":\"c7dcb7ed-a493-480f-a407-b3361f6e6305\",\"type\":\"DTO\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Field response DTO\",\"purpose\":\"RESPONSE\",\"origin\":\"DERIVED\",\"entitySources\":[{\"entityId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"includeFields\":[],\"excludeFields\":[]}],\"fields\":[{\"id\":\"eb528dd1-bc12-4b81-add7-18de31235fef\",\"name\":\"name\",\"type\":\"STRING\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"enumValues\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"3b877d4c-58b8-46c8-ab41-186b49746486\",\"name\":\"type\",\"type\":\"ENUM\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"enumValues\":[\"STRING\",\"INTEGER\",\"FLOAT\",\"BOOLEAN\",\"DATE\",\"DATETIME\",\"JSON\",\"ARRAY\",\"ASSOCIATION\"],\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"c158a616-cf57-4647-876f-e37fb325ad2f\",\"name\":\"subtype\",\"type\":\"ENUM\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"enumValues\":[\"STRING\",\"INTEGER\",\"FLOAT\",\"BOOLEAN\",\"DATE\",\"DATETIME\",\"JSON\",\"ASSOCIATION\"],\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"db08d59e-baa4-4bf2-b6c8-74f62be76de8\",\"name\":\"validations\",\"type\":\"ARRAY\",\"arraySubType\":\"ENTITY_REF\",\"arrayEntityTypeId\":\"46196b66-85e9-4be0-9522-4dbeaa780b02\",\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"enumValues\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"26d2c59d-d9c1-4708-9e3d-50b7a4a887bf\",\"name\":\"meta\",\"type\":\"CUSTOM_TYPE_REF\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":\"5be3d8af-3e75-4afd-9134-f168545d1dfd\",\"entityTypeInvalid\":false,\"sourceEntityId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"enumValues\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"b67a7b5b-75ff-4700-a396-80beccb2b4f5\",\"name\":\"option\",\"type\":\"CUSTOM_TYPE_REF\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":\"c077cfff-54f6-434a-8c52-6708f546adbf\",\"entityTypeInvalid\":false,\"sourceEntityId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"enumValues\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}}],\"position\":{\"x\":1741.0739640749164,\"y\":1828.8964628736726},\"size\":{\"w\":210,\"h\":140},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"config\":{\"lombokStyle\":\"BOTH\",\"validationEnabled\":false}}",
+        "createdAt": 1778467245604,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "d5a4a3c2-5996-486e-9509-32c41d5d1a16",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "TABLE",
+        "label": "Predicate Table",
+        "position": {
+            "x": 608.8673742771879,
+            "y": 414.2969295497404
+        },
+        "size": {
+            "w": 220,
+            "h": 160
+        },
+        "data": "{\"id\":\"d5a4a3c2-5996-486e-9509-32c41d5d1a16\",\"type\":\"TABLE\",\"label\":\"Predicate Table\",\"tableName\":\"predicate\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"entityId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"dbNodeId\":\"7a145069-233d-4ea7-beea-f3784df3f2b3\",\"position\":{\"x\":608.8673742771879,\"y\":414.2969295497404},\"size\":{\"w\":220,\"h\":160},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"customQueries\":[{\"id\":\"9ed19f5d-9dcb-4b73-8680-3934c233fc57\",\"methodName\":\"listAll\",\"description\":\"Dynamically builds and executes a paginated, filterable, sortable query over the predicate table based on a recursive FilterGroup, optional global search key, and explicit search field IDs.\",\"targetEntityId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"type\":\"AI\",\"queryString\":null,\"aiPrompt\":{\"description\":\"Generate a dynamic JPA Criteria (or Specification) query that returns a Page<Predicate> filtered by a recursive FilterGroup tree, narrowed by an optional global searchKey across the field IDs listed in searchBy, sorted by the SortCriteria list, and paginated using the Pagination input.\",\"businessRules\":\"INPUTS\\n- filter: FilterGroup { logicalOp: AND|OR, conditions: FilterCondition[], filters: FilterGroup[] } — recursive. May be null/empty (no filtering).\\n- FilterCondition { field: UUID (Field id, resolves to a column on Predicate), operator: EQ|NEQ|GT|GTE|LT|LTE|IN|NOT_IN|LIKE|IS_NULL|IS_NOT_NULL, value: any }.\\n- searchBy: UUID[] of Field ids. When searchKey is non-blank, build an OR of LIKE '%searchKey%' over only these fields. If searchBy is empty/null, ignore searchKey.\\n- searchKey: free-text. Trim; treat blank as absent.\\n- sorting: SortCriteria[] { field: UUID, direction: ASC|DESC }. Apply in order. Ignore unknown field ids.\\n- pagination: Pagination { page (0-based), page_size }. Required. Defaults: page=0, page_size=20. Cap page_size at 100.\\n\\nTRANSLATION RULES\\n- Resolve every field UUID to its Predicate column via the Field registry (name → column). If a UUID does not resolve, skip that condition (do not throw).\\n- Combine all entries inside a single FilterGroup (its conditions AND its nested filters) using the group's logicalOp.\\n- Recurse into nested filters. Each nested group is wrapped in its own parentheses before being combined with the parent group's logicalOp.\\n- Operator mapping: EQ →= , NEQ →<>, GT →>, GTE →>=, LT →<, LTE →<=, IN →IN (...), NOT_IN →NOT IN (...), LIKE →LIKE '%value%' (escape % and _), IS_NULL →IS NULL (no value), IS_NOT_NULL →IS NOT NULL (no value).\\n- IN / NOT_IN expect an array value; reject single scalar by skipping that condition.\\n- LIKE only valid for STRING/TEXT columns; for non-string columns, skip.\\n- The global searchKey filter is composed as (col1 LIKE :k OR col2 LIKE :k OR ...) over searchBy and AND-ed with the FilterGroup root.\\n- Always use bound parameters — never inline literals. Sanitize % and _ in LIKE values.\\n- Apply sorting AFTER filtering. If sorting is empty, default to ORDER BY created_at DESC (auditing is enabled on Predicate).\\n\\nRESULT\\n- Return Page<Predicate> using PageRequest.of(page, page_size, Sort).\\n- The total count must respect filters (use the same Specification on the count query).\",\"edgeCases\":\"- Null filter / empty conditions and filters → no WHERE clause from filter tree.\\n- An empty FilterGroup nested in a parent → emit nothing for that node, do not produce '() AND ...'.\\n- searchBy non-empty but searchKey blank → ignore search entirely.\\n- searchKey non-blank but searchBy empty → ignore search entirely (do not full-table LIKE).\\n- IS_NULL / IS_NOT_NULL must ignore the value field even if present.\\n- IN / NOT_IN with empty array → skip the condition (do not generate 'IN ()' which is invalid SQL).\\n- Unknown operator or unresolvable field UUID → skip that condition silently and log at DEBUG.\\n- Mixing AND and OR is handled purely via grouping — never flatten nested groups.\\n- page < 0 → clamp to 0. page_size <= 0 → use default 20.\\n- LIKE values: escape '%', '_', '\\\\\\\\' before binding; use ESCAPE '\\\\\\\\' in the predicate.\\n- Type coercion: convert FilterCondition.value to the column's Java type (UUID, Integer, LocalDate, enum) before binding; if coercion fails, skip the condition.\\n- Always count with the same predicate tree applied — never return a stale total.\",\"expectedBehaviour\":\"Given the example input { logicalOp: AND, conditions: [ {status,EQ,'active'}, {age,GTE,18} ], filters: [ { logicalOp: OR, conditions: [ {role,IN,['admin','mod']}, {country,EQ,'IN'} ], filters: [] } ] } the generated WHERE clause must be exactly: (status = :p1 AND age >= :p2) AND (role IN (:p3) OR country = :p4). Result is a Page<Predicate> respecting pagination, sorting, and an accurate total count. No SQL injection is possible — all values are bound parameters.\",\"aiGenerate\":true},\"params\":[{\"name\":\"searchBy\",\"type\":\"ARRAY\",\"arraySubType\":\"UUID\",\"isCollection\":true},{\"name\":\"searchKey\",\"type\":\"STRING\",\"isCollection\":false},{\"name\":\"sorting\",\"type\":\"ARRAY\",\"arraySubType\":\"CUSTOM_TYPE_REF\",\"arrayCustomTypeId\":\"fffaafe2-d788-40dd-a5d5-eb8801d7b747\",\"isCollection\":true},{\"name\":\"pagination\",\"type\":\"CUSTOM_TYPE_REF\",\"customTypeId\":\"a1712799-76db-42f1-b65a-579cca8e3cbc\",\"isCollection\":false},{\"name\":\"filter\",\"type\":\"CUSTOM_TYPE_REF\",\"customTypeId\":\"474532fa-3cbd-4c69-903c-2ac925a80a42\",\"isCollection\":false}],\"returnType\":{\"entityId\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"isList\":false,\"isPage\":true,\"isOptional\":false,\"projectionClass\":\"\"},\"nativeQuery\":false,\"modifying\":false,\"cache\":null}]}",
+        "createdAt": 1778389520705,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "db4a36d6-a534-4c6d-a2e0-9ea6ef97865e",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "ENTITY",
+        "label": "Field",
+        "position": {
+            "x": 1066.3582371687553,
+            "y": 2067.4311033192353
+        },
+        "size": {
+            "w": 240,
+            "h": 180
+        },
+        "data": "{\"id\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"type\":\"ENTITY\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Field\",\"tableName\":\"field\",\"position\":{\"x\":1066.3582371687553,\"y\":2067.4311033192353},\"size\":{\"w\":240,\"h\":180},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"fields\":[{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"id\",\"type\":\"UUID\",\"constraint\":\"PK\",\"nullable\":false,\"id\":\"24218f4b-c3e9-4b08-a5e4-5675997bb98a\"},{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"name\",\"type\":\"STRING\",\"constraint\":\"NONE\",\"nullable\":false,\"id\":\"978940f3-5644-458b-81a0-916590effb56\"},{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"type\",\"type\":\"ENUM\",\"constraint\":\"NONE\",\"nullable\":false,\"enumValues\":{\"values\":[\"STRING\",\"INTEGER\",\"FLOAT\",\"BOOLEAN\",\"DATE\",\"DATETIME\",\"JSON\",\"ARRAY\",\"ASSOCIATION\"],\"columnDefinition\":\"VARCHAR(20)\"},\"id\":\"42a567c0-ca27-4a80-ba44-b6ae388b49d5\"},{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"subtype\",\"type\":\"ENUM\",\"constraint\":\"NONE\",\"nullable\":true,\"enumValues\":{\"values\":[\"STRING\",\"INTEGER\",\"FLOAT\",\"BOOLEAN\",\"DATE\",\"DATETIME\",\"JSON\",\"ASSOCIATION\"],\"columnDefinition\":\"VARCHAR(20)\"},\"id\":\"233c22cc-4b88-49c0-a416-28e775308b34\"},{\"id\":\"fab10d1b-9226-4dc4-8f5a-7e5de60f8fdf\",\"name\":\"validations\",\"type\":\"ARRAY\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":\"ENTITY_REF\",\"arrayEntityTypeId\":\"46196b66-85e9-4be0-9522-4dbeaa780b02\",\"arrayCustomTypeId\":null,\"relation\":{\"id\":\"0392ff1c-e9ba-4e2e-a27d-5b6958793357\",\"type\":\"ONE_TO_MANY\",\"targetEntityId\":\"46196b66-85e9-4be0-9522-4dbeaa780b02\",\"mappedBy\":\"id\",\"cascade\":\"NONE\",\"fetch\":\"LAZY\",\"optional\":true},\"constraint\":\"NONE\",\"nullable\":true,\"columnName\":\"\",\"defaultValue\":\"\",\"enumValues\":null,\"entityTypeWarning\":false},{\"id\":\"cf2c31b1-c5e4-47cf-99fa-35fc73a9cff5\",\"name\":\"meta\",\"type\":\"CUSTOM_TYPE_REF\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":\"5be3d8af-3e75-4afd-9134-f168545d1dfd\",\"relation\":null,\"constraint\":\"NONE\",\"nullable\":true,\"columnName\":\"meta\",\"defaultValue\":\"\",\"enumValues\":null,\"entityTypeWarning\":false},{\"id\":\"5db2621c-8ac1-4dc0-a2fa-93cf640b5ef2\",\"name\":\"option\",\"type\":\"CUSTOM_TYPE_REF\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":\"c077cfff-54f6-434a-8c52-6708f546adbf\",\"relation\":null,\"constraint\":\"NONE\",\"nullable\":true,\"columnName\":\"option\",\"defaultValue\":\"\",\"enumValues\":null,\"entityTypeWarning\":false}],\"relations\":[],\"config\":{\"softDelete\":false,\"auditing\":true,\"lombokStyle\":\"BOTH\",\"generateRepository\":true}}",
+        "createdAt": 1778350876634,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "e68687cc-54bb-49bc-8a40-9770165009c5",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "CONTROLLER",
+        "label": "Object Controller",
+        "position": {
+            "x": 1800.2731079923874,
+            "y": 2798.096809935892
+        },
+        "size": {
+            "w": 220,
+            "h": 100
+        },
+        "data": "{\"id\":\"e68687cc-54bb-49bc-8a40-9770165009c5\",\"type\":\"CONTROLLER\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Object Controller\",\"basePath\":\"/api/v1/object\",\"position\":{\"x\":1800.2731079923874,\"y\":2798.096809935892},\"size\":{\"w\":220,\"h\":100},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"swaggerTags\":[],\"authRuleId\":null,\"errorHandlerConfig\":{\"errors\":[{\"description\":\"Missing required fields: name, fields\",\"httpStatus\":400,\"message\":\"VALIDATION_ERROR\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"Missing required fields: name, fields\"}],\"id\":\"c2a3dd6f-ca38-4bb1-9a46-19ffec9e6514\"},{\"description\":\"fields array is empty\",\"httpStatus\":400,\"message\":\"FIELDS_EMPTY\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"fields array is empty\"}],\"id\":\"690b3752-dea1-4d00-acb0-198f8cd34c09\"},{\"description\":\"One or more field IDs do not exist\",\"httpStatus\":404,\"message\":\"FIELD_NOT_FOUND\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"One or more field IDs do not exist\"}],\"id\":\"7fb0bcf1-817d-4bf5-b8c2-ad4fdedc9141\"},{\"description\":\"An Object with this name already exists\",\"httpStatus\":409,\"message\":\"DUPLICATE_NAME\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"An Object with this name already exists\"}],\"id\":\"6d301084-fee4-417b-9c32-b2cb31902025\"},{\"description\":\"status is not a valid enum value\",\"httpStatus\":400,\"message\":\"INVALID_STATUS\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"status is not a valid enum value\"}],\"id\":\"25fe8376-b210-424a-b4b6-13179bd70da0\"},{\"description\":\"DB table creation failed when status is ACTIVE\",\"httpStatus\":500,\"message\":\"TABLE_PROVISION_FAILED\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"DB table creation failed when status is ACTIVE\"}],\"id\":\"18d2de9e-4c43-4496-9a7d-742e7cc2a91e\"},{\"description\":\"No object found for the given id\",\"httpStatus\":404,\"message\":\"OBJECT_NOT_FOUND\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"No object found for the given id\"}],\"id\":\"fa4a7b54-33e8-4497-84d9-7e8c83162310\"},{\"description\":\"Updated name already taken\",\"httpStatus\":409,\"message\":\"DUPLICATE_NAME\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"Updated name already taken\"}],\"id\":\"920537f4-3522-4f6c-8543-8944630b65d3\"},{\"description\":\"Invalid status transition (e.g. ACTIVE -> DRAFT is not allowed)\",\"httpStatus\":400,\"message\":\"INVALID_STATUS\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"Invalid status transition (e.g. ACTIVE -> DRAFT is not allowed)\"}],\"id\":\"f44f8cb5-a5e8-47a7-9617-90d69955f9d5\"},{\"description\":\"Removing a field that has existing data in the dynamic table\",\"httpStatus\":409,\"message\":\"FIELD_HAS_DATA\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"Removing a field that has existing data in the dynamic table\"}],\"id\":\"4e4f26a5-4026-42b7-9582-98db4bf4df11\"},{\"description\":\"ALTER TABLE failed during field addition/removal\",\"httpStatus\":500,\"message\":\"TABLE_ALTER_FAILED\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"ALTER TABLE failed during field addition/removal\"}],\"id\":\"e05bd84e-0c88-447c-8b62-c8d3e2011a72\"},{\"description\":\"Table creation failed on DRAFT -> ACTIVE transition\",\"httpStatus\":500,\"message\":\"TABLE_PROVISION_FAILED\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"Table creation failed on DRAFT -> ACTIVE transition\"}],\"id\":\"0b377cda-b0c8-4cee-ba43-9fd1cfa4ff1a\"},{\"description\":\"Cannot delete an ACTIVE object - deprecate it first\",\"httpStatus\":409,\"message\":\"OBJECT_IS_ACTIVE\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"Cannot delete an ACTIVE object - deprecate it first\"}],\"id\":\"913d5714-0d40-4f85-9c7d-491aa28c12b5\"},{\"description\":\"Dynamic table contains records - cannot delete\",\"httpStatus\":409,\"message\":\"OBJECT_HAS_DATA\",\"includeTimestamp\":true,\"fields\":[{\"key\":\"detail\",\"value\":\"Dynamic table contains records - cannot delete\"}],\"id\":\"ae4505af-5fd9-456d-a775-136971e7669f\"}],\"includeTimestamp\":true,\"includeRequestPath\":true},\"config\":{\"crossOrigin\":false,\"apiVersion\":null,\"requestLogging\":false}}",
+        "createdAt": 1778687374682,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "e7a76479-6ef0-453d-b154-fe83aa10a4ae",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "TABLE",
+        "label": "Object Table",
+        "position": {
+            "x": 595.3771832131767,
+            "y": 2763.4483106910993
+        },
+        "size": {
+            "w": 220,
+            "h": 160
+        },
+        "data": "{\"id\":\"e7a76479-6ef0-453d-b154-fe83aa10a4ae\",\"type\":\"TABLE\",\"label\":\"Object Table\",\"tableName\":\"object\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"entityId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"dbNodeId\":\"7a145069-233d-4ea7-beea-f3784df3f2b3\",\"position\":{\"x\":595.3771832131767,\"y\":2763.4483106910993},\"size\":{\"w\":220,\"h\":160},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"customQueries\":[{\"id\":\"6c73d2ae-2834-45b8-b26e-904f5af255bb\",\"methodName\":\"listAll\",\"description\":\"Dynamically builds and executes a paginated, filterable, sortable query over the object table based on a recursive FilterGroup, optional global search key, and explicit search field IDs.\",\"targetEntityId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"type\":\"AI\",\"queryString\":null,\"aiPrompt\":{\"description\":\"Generate a dynamic JPA Criteria (or Specification) query that returns a Page<Object> filtered by a recursive FilterGroup tree, narrowed by an optional global searchKey across the field IDs listed in searchBy, sorted by the SortCriteria list, and paginated using the Pagination input.\",\"businessRules\":\"INPUTS\\n- filter: FilterGroup { logicalOp: AND|OR, conditions: FilterCondition[], filters: FilterGroup[] } — recursive. May be null/empty (no filtering).\\n- FilterCondition { field: UUID (Field id, resolves to a column on Object), operator: EQ|NEQ|GT|GTE|LT|LTE|IN|NOT_IN|LIKE|IS_NULL|IS_NOT_NULL, value: any }.\\n- searchBy: UUID[] of Field ids. When searchKey is non-blank, build an OR of LIKE '%searchKey%' over only these fields. If searchBy is empty/null, ignore searchKey.\\n- searchKey: free-text. Trim; treat blank as absent.\\n- sorting: SortCriteria[] { field: UUID, direction: ASC|DESC }. Apply in order. Ignore unknown field ids.\\n- pagination: Pagination { page (0-based), page_size }. Required. Defaults: page=0, page_size=20. Cap page_size at 100.\\n\\nOBJECT ENTITY COLUMNS\\n- name (STRING, UNIQUE, NOT NULL)\\n- table_name (STRING, UNIQUE, NOT NULL)\\n- status (ENUM, NOT NULL) — e.g. DRAFT | ACTIVE | DEPRECATED\\n- fields (ARRAY of Field refs, NULLABLE)\\n- id (UUID, PK)\\n- created_at, updated_at (auditing enabled)\\n\\nTRANSLATION RULES\\n- Resolve every field UUID to its Object column via the Field registry (name → column). If a UUID does not resolve, skip that condition (do not throw).\\n- Combine all entries inside a single FilterGroup (its conditions AND its nested filters) using the group's logicalOp.\\n- Recurse into nested filters. Each nested group is wrapped in its own parentheses before being combined with the parent group's logicalOp.\\n- Operator mapping: EQ →= , NEQ →<>, GT →>, GTE →>=, LT →<, LTE →<=, IN →IN (...), NOT_IN →NOT IN (...), LIKE →LIKE '%value%' (escape % and _), IS_NULL →IS NULL (no value), IS_NOT_NULL →IS NOT NULL (no value).\\n- IN / NOT_IN expect an array value; reject single scalar by skipping that condition.\\n- LIKE only valid for STRING/TEXT columns (name, table_name); for non-string columns, skip.\\n- The global searchKey filter is composed as (col1 LIKE :k OR col2 LIKE :k OR ...) over searchBy and AND-ed with the FilterGroup root.\\n- Always use bound parameters — never inline literals. Sanitize % and _ in LIKE values.\\n- Apply sorting AFTER filtering. If sorting is empty, default to ORDER BY created_at DESC (auditing is enabled on Object).\",\"edgeCases\":\"- Null filter / empty conditions and filters → no WHERE clause from filter tree.\\n- An empty FilterGroup nested in a parent → emit nothing for that node, do not produce '() AND ...'.\\n- searchBy non-empty but searchKey blank → ignore search entirely.\\n- searchKey non-blank but searchBy empty → ignore search entirely (do not full-table LIKE).\\n- IS_NULL / IS_NOT_NULL must ignore the value field even if present.\\n- IN / NOT_IN with empty array → skip the condition (do not generate 'IN ()' which is invalid SQL).\\n- Unknown operator or unresolvable field UUID → skip that condition silently and log at DEBUG.\\n- Mixing AND and OR is handled purely via grouping — never flatten nested groups.\\n- page < 0 → clamp to 0. page_size <= 0 → use default 20.\\n- LIKE values: escape '%', '_', '\\\\\\\\' before binding; use ESCAPE '\\\\\\\\' in the predicate.\\n- Type coercion: convert FilterCondition.value to the column's Java type (enum for status, String for name/table_name) before binding; if coercion fails, skip the condition.\\n- Always count with the same predicate tree applied — never return a stale total.\",\"expectedBehaviour\":\"Given the example input { logicalOp: AND, conditions: [ {status,EQ,'ACTIVE'}, {name,LIKE,'order'} ], filters: [ { logicalOp: OR, conditions: [ {table_name,EQ,'orders'}, {status,IN,['DRAFT','ACTIVE']} ], filters: [] } ] } the generated WHERE clause must be exactly: (status = :p1 AND name LIKE :p2 ESCAPE '\\\\\\\\') AND (table_name = :p3 OR status IN (:p4)). Result is a Page<Object> respecting pagination, sorting, and an accurate total count. No SQL injection is possible — all values are bound parameters.\",\"aiGenerate\":true},\"params\":[{\"name\":\"searchBy\",\"type\":\"ARRAY\",\"arraySubType\":\"UUID\",\"isCollection\":true},{\"name\":\"searchKey\",\"type\":\"STRING\",\"isCollection\":false},{\"name\":\"sorting\",\"type\":\"ARRAY\",\"arraySubType\":\"CUSTOM_TYPE_REF\",\"arrayCustomTypeId\":\"fffaafe2-d788-40dd-a5d5-eb8801d7b747\",\"isCollection\":true},{\"name\":\"pagination\",\"type\":\"CUSTOM_TYPE_REF\",\"customTypeId\":\"a1712799-76db-42f1-b65a-579cca8e3cbc\",\"isCollection\":false},{\"name\":\"filter\",\"type\":\"CUSTOM_TYPE_REF\",\"customTypeId\":\"474532fa-3cbd-4c69-903c-2ac925a80a42\",\"isCollection\":false}],\"returnType\":{\"entityId\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"isList\":false,\"isPage\":true,\"isOptional\":false,\"projectionClass\":\"\"},\"nativeQuery\":false,\"modifying\":false,\"cache\":null}]}",
+        "createdAt": 1778687363950,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "ece68193-9da7-4245-98c4-7bb0b0cfa477",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "CREATE Field API",
+        "position": {
+            "x": 2199.503071826045,
+            "y": 1817.924860426902
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"ece68193-9da7-4245-98c4-7bb0b0cfa477\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"CREATE Field API\",\"method\":\"POST\",\"path\":\"/\",\"position\":{\"x\":2199.503071826045,\"y\":1817.924860426902},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":false,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[],\"queryParams\":[],\"bodyDTOId\":\"1bda28f0-76f7-40ef-b14e-3102ea69e782\"},\"response\":{\"successCode\":201,\"returnDTOId\":\"823e5284-e249-4191-92bf-3c8388a576dd\",\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778466987488,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "f0e36cbf-703b-473f-a34c-e3824ab12b42",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "ENTITY",
+        "label": "Predicate",
+        "position": {
+            "x": 1070.0649546480608,
+            "y": 400.1493718442591
+        },
+        "size": {
+            "w": 240,
+            "h": 180
+        },
+        "data": "{\"id\":\"f0e36cbf-703b-473f-a34c-e3824ab12b42\",\"type\":\"ENTITY\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Predicate\",\"tableName\":\"predicate\",\"position\":{\"x\":1070.0649546480608,\"y\":400.1493718442591},\"size\":{\"w\":240,\"h\":180},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"fields\":[{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"id\",\"type\":\"UUID\",\"constraint\":\"PK\",\"nullable\":false,\"enumValues\":null,\"id\":\"efe7f5b8-1402-492d-ba12-e5484407bc77\"},{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"name\",\"type\":\"STRING\",\"constraint\":\"UNIQUE\",\"nullable\":false,\"enumValues\":null,\"id\":\"69a94a51-68ee-473b-af6d-4cc991847bf4\"},{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"operation\",\"type\":\"ENUM\",\"constraint\":\"NONE\",\"nullable\":false,\"enumValues\":{\"values\":[\"MIN\",\"MAX\",\"MIN_LENGTH\",\"MAX_LENGTH\",\"EQUALS\",\"NOT_EQUALS\",\"IN\",\"NOT_IN\",\"REQUIRED\",\"IS_NULL\",\"IS_NOT_NULL\",\"PATTERN\"],\"columnDefinition\":\"VARCHAR(20)\"},\"id\":\"5c8b930f-92a9-425a-8cd5-70828261dd9b\"},{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"type\",\"type\":\"ENUM\",\"constraint\":\"NONE\",\"nullable\":false,\"enumValues\":{\"values\":[\"SIMPLE\",\"REGEX\"],\"columnDefinition\":\"VARCHAR(10)\"},\"id\":\"68fac678-7028-407a-a064-27f485d67781\"}],\"relations\":[],\"config\":{\"softDelete\":false,\"auditing\":true,\"lombokStyle\":\"BOTH\",\"generateRepository\":true}}",
+        "createdAt": 1778349119744,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "f0ef09a0-40b2-49ff-ad42-d3a25c0478e1",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "ENTITY",
+        "label": "Object",
+        "position": {
+            "x": 1064.071061629859,
+            "y": 2753.42712642678
+        },
+        "size": {
+            "w": 240,
+            "h": 180
+        },
+        "data": "{\"id\":\"f0ef09a0-40b2-49ff-ad42-d3a25c0478e1\",\"type\":\"ENTITY\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Object\",\"tableName\":\"object\",\"position\":{\"x\":1064.071061629859,\"y\":2753.42712642678},\"size\":{\"w\":240,\"h\":180},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"fields\":[{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"id\",\"type\":\"UUID\",\"constraint\":\"PK\",\"nullable\":false,\"enumValues\":null,\"id\":\"965ec6cd-b4b0-4687-98d5-865d837e5e60\"},{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"name\",\"type\":\"STRING\",\"constraint\":\"UNIQUE\",\"nullable\":false,\"enumValues\":null,\"id\":\"00a9bd62-7dc5-45cd-8112-7dfbb50e6c0c\"},{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"tableName\",\"type\":\"STRING\",\"constraint\":\"UNIQUE\",\"nullable\":false,\"enumValues\":null,\"id\":\"df7982ef-d555-4b3a-b440-00076dd9b2cc\"},{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"status\",\"type\":\"ENUM\",\"constraint\":\"NONE\",\"nullable\":false,\"enumValues\":{\"values\":[\"DRAFT\",\"ACTIVE\",\"DEPRECATED\"],\"columnDefinition\":\"VARCHAR(20)\"},\"id\":\"3a1a1f8c-d6bc-4719-b882-e33d52fb16d4\"},{\"id\":\"608a9b77-f049-4fe4-8ec5-4e6972d4395f\",\"name\":\"fields\",\"type\":\"ARRAY\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":\"ENTITY_REF\",\"arrayEntityTypeId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"arrayCustomTypeId\":null,\"relation\":{\"id\":\"629e54a3-4804-4558-96a4-2d82b2741fc4\",\"type\":\"MANY_TO_MANY\",\"targetEntityId\":\"db4a36d6-a534-4c6d-a2e0-9ea6ef97865e\",\"mappedBy\":\"id\",\"cascade\":\"NONE\",\"fetch\":\"LAZY\",\"optional\":true},\"constraint\":\"NONE\",\"nullable\":true,\"columnName\":\"\",\"defaultValue\":\"\",\"enumValues\":null,\"entityTypeWarning\":false}],\"relations\":[],\"config\":{\"softDelete\":false,\"auditing\":true,\"lombokStyle\":\"BOTH\",\"generateRepository\":true}}",
+        "createdAt": 1778388102383,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "f291b216-048f-48d2-9d25-96144fba907a",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "API_ENDPOINT",
+        "label": "POST /listAll",
+        "position": {
+            "x": 2195.723564146577,
+            "y": 2919.2137522932735
+        },
+        "size": {
+            "w": 230,
+            "h": 120
+        },
+        "data": "{\"id\":\"f291b216-048f-48d2-9d25-96144fba907a\",\"type\":\"API_ENDPOINT\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"POST /listAll\",\"method\":\"POST\",\"path\":\"/listAll\",\"position\":{\"x\":2195.723564146577,\"y\":2919.2137522932735},\"size\":{\"w\":230,\"h\":120},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"authRuleId\":null,\"config\":{\"paginated\":true,\"deprecated\":false,\"description\":\"\"},\"request\":{\"pathVars\":[],\"queryParams\":[],\"bodyDTOId\":\"ff0d28e5-0280-4b5c-8235-2a2042440312\"},\"response\":{\"successCode\":200,\"returnDTOId\":\"1e75376f-ebe8-407b-9d9d-c311ba526bb0\",\"isList\":false,\"isPage\":false},\"errorHandling\":{\"inheritFromController\":true,\"errors\":[]}}",
+        "createdAt": 1778688280210,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "f5513810-cc57-46d3-9389-eb9aa67c4635",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "DTO",
+        "label": "Validation Create DTO",
+        "position": {
+            "x": 1738.6213842730863,
+            "y": 1530.421542090661
+        },
+        "size": {
+            "w": 210,
+            "h": 140
+        },
+        "data": "{\"id\":\"f5513810-cc57-46d3-9389-eb9aa67c4635\",\"type\":\"DTO\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Validation Create DTO\",\"purpose\":\"REQUEST\",\"origin\":\"CUSTOM\",\"entitySources\":[{\"entityId\":\"46196b66-85e9-4be0-9522-4dbeaa780b02\",\"includeFields\":[],\"excludeFields\":[\"predicate\"]}],\"fields\":[{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"name\",\"type\":\"STRING\",\"validations\":[{\"type\":\"NOT_NULL\"}],\"enumValues\":null,\"id\":\"e6f1ba2e-b714-4e1e-b950-7e3e78b9102a\"},{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"type\",\"type\":\"ENUM\",\"enumValues\":[\"NOT_NULL\",\"NOT_BLANK\",\"MIN\",\"MAX\",\"SIZE\",\"EMAIL\",\"PATTERN\",\"POSITIVE\"],\"validations\":[{\"type\":\"NOT_NULL\"}],\"id\":\"d05968a6-c721-4c38-a724-1d832e14b38d\"},{\"arraySubType\":null,\"arrayEntityTypeId\":null,\"name\":\"value\",\"type\":\"STRING\",\"validations\":[{\"type\":\"NOT_NULL\"}],\"enumValues\":null,\"id\":\"7a228114-8fea-46b8-8cb0-9cdfcf2d56be\"},{\"name\":\"predicateId\",\"type\":\"UUID\",\"validations\":[{\"type\":\"NOT_NULL\"}],\"enumValues\":null,\"id\":\"e84f1359-cd6a-44fc-b774-bafae2efeea2\",\"entityTypeId\":null,\"customTypeId\":null,\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeInvalid\":false}],\"position\":{\"x\":1738.6213842730863,\"y\":1530.421542090661},\"size\":{\"w\":210,\"h\":140},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"config\":{\"lombokStyle\":\"BOTH\",\"validationEnabled\":false}}",
+        "createdAt": 1778423048328,
+        "updatedAt": 1782317126145
+    },
+    {
+        "id": "ff0d28e5-0280-4b5c-8235-2a2042440312",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "DTO",
+        "label": "Find Request DTO",
+        "position": {
+            "x": 3420.4168895638427,
+            "y": 1804.7076077790925
+        },
+        "size": {
+            "w": 210,
+            "h": 190
+        },
+        "data": "{\"id\":\"ff0d28e5-0280-4b5c-8235-2a2042440312\",\"type\":\"DTO\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"label\":\"Find Request DTO\",\"purpose\":\"REQUEST\",\"origin\":\"CUSTOM\",\"entitySources\":[],\"fields\":[{\"id\":\"093fa7be-6819-42de-89dc-4e1d5e7f772d\",\"name\":\"searchBy\",\"type\":\"ARRAY\",\"arraySubType\":\"UUID\",\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"3cbc1273-3e9e-40b8-b933-f59d42500a44\",\"name\":\"searchKey\",\"type\":\"STRING\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"f051fd10-e9b5-433b-b372-03fcb5e4b830\",\"name\":\"sorting\",\"type\":\"ARRAY\",\"arraySubType\":\"CUSTOM_TYPE_REF\",\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":\"fffaafe2-d788-40dd-a5d5-eb8801d7b747\",\"entityTypeId\":null,\"customTypeId\":null,\"entityTypeInvalid\":false,\"sourceEntityId\":null,\"enumValues\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"f15761bc-af11-4b46-82f2-905fb345d086\",\"name\":\"pagination\",\"type\":\"CUSTOM_TYPE_REF\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":\"a1712799-76db-42f1-b65a-579cca8e3cbc\",\"entityTypeInvalid\":false,\"sourceEntityId\":null,\"enumValues\":null,\"validations\":[{\"type\":\"NOT_NULL\",\"value\":\"\",\"message\":\"\"}],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}},{\"id\":\"877653b3-dbfb-460e-ada3-190aa139fe71\",\"name\":\"filter\",\"type\":\"CUSTOM_TYPE_REF\",\"arraySubType\":null,\"arrayEntityTypeId\":null,\"arrayCustomTypeId\":null,\"entityTypeId\":null,\"customTypeId\":\"474532fa-3cbd-4c69-903c-2ac925a80a42\",\"entityTypeInvalid\":false,\"sourceEntityId\":null,\"enumValues\":null,\"validations\":[],\"serialization\":{\"jsonProperty\":\"\",\"jsonIgnore\":false,\"includeNonNull\":false}}],\"position\":{\"x\":3420.4168895638427,\"y\":1804.7076077790925},\"size\":{\"w\":210,\"h\":190},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false},\"config\":{\"lombokStyle\":\"BOTH\",\"validationEnabled\":false}}",
+        "createdAt": 1778400836634,
+        "updatedAt": 1782317126146
+    },
+    {
+        "id": "fffaafe2-d788-40dd-a5d5-eb8801d7b747",
+        "projectId": "698959ce-379f-4260-a8f8-e766fadb4c5e",
+        "type": "CUSTOM_TYPE",
+        "label": "SortCriteria",
+        "position": {
+            "x": 3761.8014638880177,
+            "y": 1429.4384748818266
+        },
+        "size": {
+            "w": 210,
+            "h": 130
+        },
+        "data": "{\"id\":\"fffaafe2-d788-40dd-a5d5-eb8801d7b747\",\"type\":\"CUSTOM_TYPE\",\"label\":\"SortCriteria\",\"msId\":\"13e95cea-d298-4330-b9c6-aef964f03439\",\"fields\":[{\"id\":\"4387a9d4-4a72-4c4d-942a-c11070da431e\",\"name\":\"field\",\"type\":\"UUID\",\"entityTypeId\":null,\"customTypeId\":null,\"nullable\":true,\"defaultValue\":\"\",\"enumValues\":null},{\"id\":\"2af34fe4-6f19-49bf-a3be-65882be39f4e\",\"name\":\"direction\",\"type\":\"ENUM\",\"entityTypeId\":null,\"customTypeId\":null,\"nullable\":true,\"defaultValue\":\"\",\"enumValues\":{\"values\":[\"ASC\",\"DESC\"],\"columnDefinition\":\"VARCHAR(20)\"}}],\"position\":{\"x\":3761.8014638880177,\"y\":1429.4384748818266},\"size\":{\"w\":210,\"h\":130},\"aiPrompt\":{\"description\":\"\",\"businessRules\":\"\",\"edgeCases\":\"\",\"expectedBehaviour\":\"\",\"aiGenerate\":false}}",
+        "createdAt": 1778402549509,
+        "updatedAt": 1782317126146
+    }
+]

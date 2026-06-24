@@ -9,12 +9,13 @@ export interface EditorHeaderProps {
 }
 
 export interface EditorHeaderHook {
-  isEditing:        boolean
-  editValue:        string
-  inputRef:         React.RefObject<HTMLInputElement | null>
-  startEdit:        () => void
-  commitEdit:       () => void
-  cancelEdit:       () => void
-  handleEditKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void
-  setEditValue:     (v: string) => void
+  isEditing:              boolean
+  editValue:              string
+  inputRef:               React.RefObject<HTMLInputElement | null>
+  startEdit:              () => void
+  commitEdit:             () => void
+  cancelEdit:             () => void
+  handleEditKeyDown:      (e: React.KeyboardEvent<HTMLInputElement>) => void
+  setEditValue:           (v: string) => void
+  handleCloneFromExample: () => Promise<void>
 }
