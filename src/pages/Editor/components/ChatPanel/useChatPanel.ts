@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useMemo } from 'react'
+import { useLiveQuery }               from 'dexie-react-hooks'
 import { useReactFlow } from '@xyflow/react'
 import { useChatStore, useCodeEditorStore } from '@store'
 import {
@@ -12,7 +13,6 @@ import type { ChatMessage } from '@entity'
 import type { ChatPanelHook, MsNodeEntry } from './types'
 
 export const useChatPanel = (projectId: string): ChatPanelHook => {
-  const [msNodes, setMsNodes] = useState<MsNodeEntry[]>([])
   const abortControllerRef = useRef<AbortController | null>(null)
 
   const { setNodes, setEdges, getNodes } = useReactFlow()
@@ -29,28 +29,28 @@ export const useChatPanel = (projectId: string): ChatPanelHook => {
   const setActiveChatMessages  = useChatStore(s => s.setActiveChatMessages)
   const toggleSendArchitecture = useChatStore(s => s.toggleSendArchitecture)
 
+  const msRows = useLiveQuery(
+    () => db.nodes.where('[projectId+type]').equals([projectId, NodeType.MICROSERVICE]).toArray(),
+    [projectId],
+    [],
+  )
+
+  const msNodes = useMemo<MsNodeEntry[]>(() =>
+    (msRows ?? []).map(row => {
+      let label = row.label
+      try {
+        const parsed = JSON.parse(row.data) as { label?: string }
+        if (parsed.label) label = parsed.label
+      } catch { /* use row.label */ }
+      return { id: row.id, label }
+    }),
+  [msRows])
+
   useEffect(() => {
-    void (async () => {
-      const rows = await db.nodes
-        .where('[projectId+type]')
-        .equals([projectId, NodeType.MICROSERVICE])
-        .toArray()
-      const entries: MsNodeEntry[] = rows.map(row => {
-        let label = row.label
-        try {
-          const parsed = JSON.parse(row.data) as { label?: string }
-          if (parsed.label) label = parsed.label
-        } catch {
-          // use row.label as fallback
-        }
-        return { id: row.id, label }
-      })
-      setMsNodes(entries)
-      if (!useCodeEditorStore.getState().activeMsId && entries.length > 0) {
-        useCodeEditorStore.getState().setActiveMsId(entries[0].id)
-      }
-    })()
-  }, [projectId])
+    if (msNodes.length > 0 && !useCodeEditorStore.getState().activeMsId) {
+      useCodeEditorStore.getState().setActiveMsId(msNodes[0].id)
+    }
+  }, [msNodes])
 
   useEffect(() => {
     if (!activeMsId) return

@@ -1,11 +1,12 @@
-import { useState, useEffect, useCallback } from 'react'
-import { useParams, useNavigate }            from 'react-router-dom'
-import { db }                               from '@db'
-import { ROUTES }                           from '@constants/routes'
+import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useParams, useNavigate }                     from 'react-router-dom'
+import { useLiveQuery }                               from 'dexie-react-hooks'
+import { db }                                         from '@db'
+import { ROUTES }                                     from '@constants/routes'
 import { useProjectStore, useCodeEditorStore, useCanvasStore } from '@store'
 import { downloadAsZip, exportArchitecture, generateClaudeContext } from '@utils'
 import { NodeType }                                                  from '@entity'
-import type { ActiveTab, EditorProject }    from './types'
+import type { ActiveTab, EditorProject }              from './types'
 
 // ─── MsNodeEntry ─────────────────────────────────────────────────
 
@@ -37,7 +38,6 @@ export const useEditor = (): EditorHook => {
   const [project,   setProject]   = useState<EditorProject | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [activeTab, setActiveTab] = useState<ActiveTab>('canvas')
-  const [msNodes,   setMsNodes]   = useState<MsNodeEntry[]>([])
 
   const generatedFiles    = useCodeEditorStore(s => s.generatedFiles)
   const activeMsId        = useCodeEditorStore(s => s.activeMsId)
@@ -66,26 +66,24 @@ export const useEditor = (): EditorHook => {
     }
   }, [projectId, navigate])
 
-  // Load MS nodes from IDB
-  useEffect(() => {
-    if (!projectId) return
+  const msRows = useLiveQuery(
+    () => projectId
+      ? db.nodes.where('[projectId+type]').equals([projectId, NodeType.MICROSERVICE]).toArray()
+      : [],
+    [projectId],
+    [],
+  )
 
-    void db.nodes
-      .where('[projectId+type]')
-      .equals([projectId, NodeType.MICROSERVICE])
-      .toArray()
-      .then(rows => {
-        const entries: MsNodeEntry[] = rows.map(row => {
-          try {
-            const data = JSON.parse(row.data) as { label?: string }
-            return { id: row.id, label: data.label ?? row.label }
-          } catch {
-            return { id: row.id, label: row.label }
-          }
-        })
-        setMsNodes(entries)
-      })
-  }, [projectId])
+  const msNodes = useMemo<MsNodeEntry[]>(() =>
+    (msRows ?? []).map(row => {
+      try {
+        const data = JSON.parse(row.data) as { label?: string }
+        return { id: row.id, label: data.label ?? row.label }
+      } catch {
+        return { id: row.id, label: row.label }
+      }
+    }),
+  [msRows])
 
   // Auto-select activeMsId when Code tab becomes active
   useEffect(() => {
